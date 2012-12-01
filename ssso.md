@@ -10,7 +10,7 @@ of service events, each being an instance of a subclass of [Service](#service).
 A service is typically connected to at least one service [Provider](#provider)
 and at least one service [Consumer](#consumer). 
 
-SSSO defines five disjoint service subclasses:
+SSSO defines five disjoint service subclasses for typical service status:
 
 * [ReservedService](#reservedservice)
 * [PreparedService](#preparedservice)
@@ -61,14 +61,14 @@ for such entities, maybe because ontology engineers cannot agree on semantics:
 * Event ontology
 * Provenance ontology
 * LODE ontology (Linking Open Descriptions of Events)
-* DOLCE+DnS Ultralite ontology (`dul`)
+* DOLCE+DnS Ultralite ontology
 * CIDOC-CRM expressed in OWL
 
 An SSSO Service is subclass of all of them to make happy multiple communities.
 
     :Service a owl:Class ;
         rdfs:label "Service" ;
-        rdfs:subClassOf    
+        rdfs:subClassOf 
             dctype:Event, event:Event, prov:Activity, lode:Event, dul:Event ;
         rdfs:isDefinedBy ssso: .
 
@@ -205,6 +205,6 @@ Relates a [Consumer](#consumer) instance to a [Service](#service) instance.
 
 # References
 
-* Event Ontology
-* Provenance Ontology
+...
+
 
