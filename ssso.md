@@ -5,18 +5,7 @@
 # Introduction
 
 The **Simple Service Status Ontology (SSSO)** is an RDF ontology for typical
-status in fulfillment of a service. A service fulfillment is modeled as chain
-of service events, each being an instance of a subclass of [Service](#service).
-A service is typically connected to at least one service [Provider](#provider)
-and at least one service [Consumer](#consumer). 
-
-SSSO defines five disjoint service subclasses for typical service status:
-
-* [ReservedService](#reservedservice)
-* [PreparedService](#preparedservice)
-* [ProvidedService](#providedservice)
-* [ExecutedService](#executedservice)
-* [RejectedService](#rejectedservice)
+status in fulfillment of a service.
 
 ## Status of this document
 
@@ -26,29 +15,56 @@ GIT_REVISION_HASH.
 
 ## Namespaces
 
-The namespace of this ontology may change until final release:
+The (preliminary) namespace of this ontology is
+<http://purl.org/ontology/ssso>. The namespace prefix `ssso` is recommeded.
 
-    @prefix ssso: <http://purl.org/NET/ssso> .
-    @prefix : <http://purl.org/NET/ssso> .
-    @base   <http://purl.org/NET/ssso> .
+    @prefix :     <http://purl.org/ontology/ssso> .
+    @prefix ssso: <http://purl.org/ontology/ssso> .
+    @base         <http://purl.org/ontology/ssso> .
 
-In addition the following namespace prefixes are used:
+The following namspace prefixes are used to refer to other ontologies:
 
-    @prefix owl: <http://www.w3.org/2002/07/owl#> .
-    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix owl:    <http://www.w3.org/2002/07/owl#> .
+    @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix dctype: <http://purl.org/dc/dcmitype/> .
-    @prefix event: <http://purl.org/NET/c4dm/event.owl#> .
-    @prefix prov: <http://www.w3.org/ns/prov#> .
-    @prefix dul: <http://www.loa-cnr.it/ontologies/DUL.owl#> .
-    @prefix lode: <http://linkedevents.org/ontology/> .
-    @prefix cidoccrm: <http://purl.org/NET/cidoc-crm/core#> .
-
-    @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+    @prefix event:  <http://purl.org/ontology/c4dm/event.owl#> .
+    @prefix prov:   <http://www.w3.org/ns/prov#> .
+    @prefix dul:    <http://www.loa-cnr.it/ontologies/DUL.owl#> .
+    @prefix lode:   <http://linkedevents.org/ontology/> .
+    @prefix crm:    <http://purl.org/NET/cidoc-crm/core#> .
+    @prefix foaf:   <http://xmlns.com/foaf/0.1/> .
+    @prefix vann:   <http://purl.org/vocab/vann/> .
 
 ## Ontology
 
-    <http://purl.org/NET/ssso> a owl:Ontology ;
-        rdfs:label "SSSO" .
+    <http://purl.org/ontology/ssso> a owl:Ontology ;
+        rdfs:label "SSSO" ;
+	    vann:preferredNamespacePrefix "ssso"^^xsd:string ;
+
+# Overview
+
+A service fulfillment is modeled as chain of service events, each being an
+instance of [Service](#service). Five typical service status are defined as
+disjoint subclasses:
+
+* A [ReservedService](#reservedservice) is in status *reserved*:\
+  the service has been accepted for fulfillment but no action has taken place.
+* A [PreparedService](#preparedservice) is in status *prepared*:\
+  the fulfillment is being prepared but is has not actually started.
+* A [ProvidedService](#providedservice) is in status *provided*:\
+  the service is ready to be fulfilled on request.
+* A [ExecutedService](#executedservice) is in status *executed*:\
+  the service is actually being fulfilled.
+* A [RejectedService](#rejectedservice) is in status *rejected*:\
+  the service has been refused or stopped.
+
+A service is typically connected to at least one service [Provider](#provider)
+and at least one service [Consumer](#consumer). 
+
+This ontology does not make any assumptions about types of services. Examples
+include buying a product from a shop and lending a book from a library. The
+class [TimeTravel](#timetravel) is included as artifical example of a service
+type.
 
 # Classes
 
@@ -69,12 +85,21 @@ An SSSO Service is subclass of all of them to make happy multiple communities.
     :Service a owl:Class ;
         rdfs:label "Service" ;
         rdfs:subClassOf 
-            dctype:Event, event:Event, prov:Activity, lode:Event, dul:Event ;
+            dctype:Event , 
+			event:Event , 
+			prov:Activity , 
+			lode:Event , 
+			dul:Event ,
+            crm:E7_Activity ;
         rdfs:isDefinedBy ssso: .
 
 The time when a service started and/or ended can be expressed as instance of
 `xsd:dateTime` with properties `prov:startedAtTime` and  `prov:endedAtTime`,
-respectively. Service [providers](#provider) can be connected to a service
+respectively. The starting time must be equal to or earlier than the ending
+time (unless the service is an instance of [TimeTravel](#timetravel) and
+[ExecutedService](#executedservice)).
+
+Service [providers](#provider) can be connected to a service
 with property [providedBy](#providedby) and service [consumers](#consumer) 
 can be connected to a service with property [consumedBy](#consumedBy).
 
@@ -157,6 +182,14 @@ of consumers.
         rdfs:label "consumer" ;
         rdfs:isDefinedBy ssso: .
 
+## TimeTravel
+
+An event which ends before it has been started. Details have been implemented
+in the future.
+
+    :TimeTravel a owl:Class ;
+        rdfs:label "TimeTravel" .
+
 # Properties
 
 ## providedBy
@@ -185,7 +218,7 @@ Relates a [Provider](#provider) instance to a  [Service](#service) instance .
 
 Relates a [Service](#service) instance to a [Consumer](#consumer) instance.
 
-    ssso:consumedBy a owl:ObjectProperty ;
+    :consumedBy a owl:ObjectProperty ;
         rdfs:label "consumedBy" ;
         rdfs:domain :Service ;
         rdfs:range :Consumer ;
@@ -196,15 +229,48 @@ Relates a [Service](#service) instance to a [Consumer](#consumer) instance.
 
 Relates a [Consumer](#consumer) instance to a [Service](#service) instance.
 
-    ssso:consumedBy a owl:ObjectProperty ;
+    :consumedBy a owl:ObjectProperty ;
         rdfs:label "consumed" ;
         rdfs:domain :Consumer ;
         rdfs:range :Service ;
         owl:inverseOf :consumedBy ;
         rdfs:isDefinedBy ssso: .
 
+## next
+
+Relates a service instances to another service instance which is following in time.
+The starting time of the following service instance MUST be equal or later then the
+ending time of the previous service (unless one of the services is an instance of 
+[ExecutedService](#executedservice) and [TimeTravel](#timetravel)).
+
+    :next a owl:ObjectProperty ;
+	    rdfs:label "next" ;
+		rdfs:domain :Service ;
+		rdfs:range  :Service ;
+		owl:inverseOf :previous ;
+        rdfs:isDefinedBy ssso: .
+
+## previous
+
+Relates a service instances to another service instance which is preceding in time.
+The ending time of the previousg service instance MUST be equal or earlier then the
+starting time of the next service (unless one of the services is an instance of 
+[ExecutedService](#executedservice) and [TimeTravel](#timetravel)).
+
+    :next a owl:ObjectProperty ;
+	    rdfs:label "previous" ;
+		rdfs:domain :Service ;
+		rdfs:range  :Service ;
+		owl:inverseOf :next ;
+        rdfs:isDefinedBy ssso: .
+
 # References
+
+## Normative Reference
 
 ...
 
+## Informative References
+
+...
 
