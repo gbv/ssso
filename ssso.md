@@ -38,6 +38,7 @@ The following namspace prefixes are used to refer to other ontologies:
 ## Ontology
 
     <http://purl.org/ontology/ssso> a owl:Ontology ;
+		rdfs:label "Simple Service Status Ontology" ;
         rdfs:label "SSSO" ;
         vann:preferredNamespacePrefix "ssso" .
 

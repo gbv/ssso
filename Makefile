@@ -21,16 +21,21 @@ changes: changes.html
 changes.html:
 	@git log -4 --pretty=format:'<li><a href=ssso-%h.html><tt>%ci</tt></a>: <a href="https://github.com/gbv/ssso/commit/%H"><em>%s</em></a></li>' ssso.md > changes.html
 
-revision: ssso.html
+revision: ssso.html ssso.ttl ssso.owl
 	@cp ssso.html ssso-${REVSHRT}.html
+	@cp ssso.owl ssso-${REVSHRT}.owl
+	@cp ssso.ttl ssso-${REVSHRT}.ttl
 
 website: clean purge revision changes.html ssso.ttl ssso.owl
 	@echo "new revision to be shown at http://gbv.github.com/ssso/"
-	@rm ssso.html
+	@rm ssso.html ssso.ttl ssso.owl
 	@git checkout gh-pages
 	@perl -pi -e 's!ssso-[0-9a-z]{7}!ssso-${REVSHRT}!g' index.html
 	@sed -i '/<!-- BEGIN CHANGES -->/,/<!-- END CHANGES -->/ {//!d}; /<!-- BEGIN CHANGES -->/r changes.html' index.html
-	@git add index.html ssso-${REVSHRT}.html ssso.ttl ssso.owl
+	@cp ssso-${REVSHRT}.html ssso.html
+	@cp ssso-${REVSHRT}.ttl ssso.ttl
+	@cp ssso-${REVSHRT}.owl ssso.owl
+	@git add index.html ssso-${REVSHRT}.html ssso.ttl ssso.owl ssso.html
 	@git commit -m "revision ${REVSHRT}"
 	@git checkout master
 
