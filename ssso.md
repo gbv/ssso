@@ -39,7 +39,7 @@ The following namspace prefixes are used to refer to other ontologies:
 
     <http://purl.org/ontology/ssso> a owl:Ontology ;
         rdfs:label "SSSO" ;
-	    vann:preferredNamespacePrefix "ssso"^^xsd:string ;
+        vann:preferredNamespacePrefix "ssso" .
 
 # Overview
 
@@ -86,10 +86,10 @@ An SSSO Service is subclass of all of them to make happy multiple communities.
         rdfs:label "Service" ;
         rdfs:subClassOf 
             dctype:Event , 
-			event:Event , 
-			prov:Activity , 
-			lode:Event , 
-			dul:Event ,
+         event:Event , 
+         prov:Activity , 
+         lode:Event , 
+         dul:Event ,
             crm:E7_Activity ;
         rdfs:isDefinedBy ssso: .
 
@@ -244,10 +244,10 @@ ending time of the previous service (unless one of the services is an instance o
 [ExecutedService](#executedservice) and [TimeTravel](#timetravel)).
 
     :next a owl:ObjectProperty ;
-	    rdfs:label "next" ;
-		rdfs:domain :Service ;
-		rdfs:range  :Service ;
-		owl:inverseOf :previous ;
+       rdfs:label "next" ;
+      rdfs:domain :Service ;
+      rdfs:range  :Service ;
+      owl:inverseOf :previous ;
         rdfs:isDefinedBy ssso: .
 
 ## previous
@@ -258,10 +258,10 @@ starting time of the next service (unless one of the services is an instance of
 [ExecutedService](#executedservice) and [TimeTravel](#timetravel)).
 
     :next a owl:ObjectProperty ;
-	    rdfs:label "previous" ;
-		rdfs:domain :Service ;
-		rdfs:range  :Service ;
-		owl:inverseOf :next ;
+       rdfs:label "previous" ;
+      rdfs:domain :Service ;
+      rdfs:range  :Service ;
+      owl:inverseOf :next ;
         rdfs:isDefinedBy ssso: .
 
 # References
