@@ -34,6 +34,8 @@ The following namspace prefixes are used to refer to other ontologies:
     @prefix crm:    <http://purl.org/NET/cidoc-crm/core#> .
     @prefix foaf:   <http://xmlns.com/foaf/0.1/> .
     @prefix vann:   <http://purl.org/vocab/vann/> .
+    @prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> .
+    @prefix schema: <http://schema.org/> .
 
 ## Ontology
 
@@ -80,6 +82,8 @@ for such entities, maybe because ontology engineers cannot agree on semantics:
 * LODE ontology (Linking Open Descriptions of Events)
 * DOLCE+DnS Ultralite ontology
 * CIDOC-CRM expressed in OWL
+* Schema.org Ontology
+* NEPOMUK Calendar Ontology
 
 An SSSO Service is subclass of all of them to make happy multiple communities.
 
@@ -87,22 +91,26 @@ An SSSO Service is subclass of all of them to make happy multiple communities.
         rdfs:label "Service" ;
         rdfs:subClassOf 
             dctype:Event , 
-         event:Event , 
-         prov:Activity , 
-         lode:Event , 
-         dul:Event ,
+            event:Event , 
+            prov:Activity , 
+            lode:Event , 
+            dul:Event ,
             crm:E7_Activity ;
-        rdfs:isDefinedBy ssso: .
-
-The time when a service started and/or ended can be expressed as instance of
-`xsd:dateTime` with properties `prov:startedAtTime` and  `prov:endedAtTime`,
-respectively. The starting time must be equal to or earlier than the ending
-time (unless the service is an instance of [TimeTravel](#timetravel) and
-[ExecutedService](#executedservice)).
+			ncal:Event ,
+			schema:Event ,
+            rdfs:isDefinedBy ssso: .
 
 Service [providers](#provider) can be connected to a service
 with property [providedBy](#providedby) and service [consumers](#consumer) 
 can be connected to a service with property [consumedBy](#consumedBy).
+
+The time when a service started and/or ended can be expressed as instance of
+`xsd:dateTime` or `xsd:date` with properties `prov:startedAtTime` or
+`schema:startDate` and `prov:endedAtTime` or `schema:endDate` respectively. The
+starting time must be equal to or earlier than the ending time (unless the
+service is an instance of [TimeTravel](#timetravel) and
+[ExecutedService](#executedservice)).
+
 
 ## ReservedService
 
@@ -273,5 +281,7 @@ starting time of the next service (unless one of the services is an instance of
 
 ## Informative References
 
-...
+* Antoni Mylka (Editor). 2007. *NEPOMUK Calendar Ontology*.
+  <http://www.semanticdesktop.org/ontologies/ncal/>.
+* **Schema.org Ontology**. <http://schema.org/>.
 
