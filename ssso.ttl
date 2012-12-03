@@ -11,6 +11,8 @@
 @prefix crm:    <http://purl.org/NET/cidoc-crm/core#> .
 @prefix foaf:   <http://xmlns.com/foaf/0.1/> .
 @prefix vann:   <http://purl.org/vocab/vann/> .
+@prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> .
+@prefix schema: <http://schema.org/> .
 <http://purl.org/ontology/ssso> a owl:Ontology ;
     rdfs:label "SSSO" ;
     vann:preferredNamespacePrefix "ssso" .
@@ -18,12 +20,12 @@
     rdfs:label "Service" ;
     rdfs:subClassOf 
         dctype:Event , 
-     event:Event , 
-     prov:Activity , 
-     lode:Event , 
-     dul:Event ,
+        event:Event , 
+        prov:Activity , 
+        lode:Event , 
+        dul:Event ,
         crm:E7_Activity ;
-    rdfs:isDefinedBy ssso: .
+        rdfs:isDefinedBy ssso: .
 :ReservedService a owl:Class ;
     rdfs:label "ReservedService" ;
     rdfs:subClassOf :Service ;
