@@ -5,13 +5,14 @@ REVLINK=https://github.com/gbv/ssso/commit/${REVHASH}
 
 html: ssso.html
 
-new: purge html changes
+new: purge html changes rdf
 
 ssso.html: ssso.md template.html5
 	@echo "creating ssso.html..."
 	@sed 's/GIT_REVISION_DATE/${REVDATE}/' ssso.md  > ssso.tmp
 	@ pandoc -s -N --template=template --toc -f markdown -t html5 ssso.tmp \
 	| perl -p -e 's!(http://[^<]+)\.</p>!<a href="$$1"><code class="url">$$1</code></a>.</p>!g' \
+	| perl -p -e 's!(<h2(.+)span>\s*([^<]+)</a></h2>)!<a id="$$3"></a>$$1!g' \
 	| sed 's!<td style="text-align: center;">!<td>!' \
 	| sed 's!GIT_REVISION_HASH!<a href="${REVLINK}">${REVSHRT}<\/a>!' > ssso.html
 	@git diff-index --quiet HEAD ssso.md || echo "Current ssso.md not checked in, so this is a DRAFT!" 
@@ -43,13 +44,19 @@ cleancopy:
 	@echo "checking that no local modifcations exist..."
 	@git diff-index --quiet HEAD -- 
 
-ssso.ttl: ssso.md
-	@grep '^    ' $< | sed 's/^    //' > $@
+ssso-tmp.ttl: ssso.md
+	$(if $(shell grep -P '\t' $<),$(error "found tabs in $<"))
+	@awk '/^```/ { FLAG=!FLAG } !FLAG && /^    / { print }' $< | sed 's/^    //' > $@
 
-ssso.owl: ssso.ttl
-	@rapper --guess ssso.ttl -o rdfxml > $@
+rdf: ssso.ttl ssso.owl
+
+ssso.ttl: ssso-tmp.ttl
+	@rapper --guess $< -o turtle > $@
+	
+ssso.owl: ssso-tmp.ttl
+	@rapper --guess $< -o rdfxml > $@
 
 purge:
-	@rm -f ssso.html ssso-*.html changes.html
+	@rm -f ssso.html ssso-*.html changes.html *.owl *.ttl
 
-.PHONY: clean purge html
+.PHONY: clean purge html rdf
