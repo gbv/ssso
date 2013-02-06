@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rdf:RDF xmlns:crm="http://purl.org/NET/cidoc-crm/core#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dctype="http://purl.org/dc/dcmitype/" xmlns:dul="http://www.loa-cnr.it/ontologies/DUL.owl#" xmlns:event="http://purl.org/ontology/c4dm/event.owl#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:lode="http://linkedevents.org/ontology/" xmlns:ncal="http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:schema="http://schema.org/" xmlns:ssso="http://purl.org/ontology/ssso#" xmlns:vann="http://purl.org/vocab/vann/">
+<rdf:RDF xmlns:crm="http://purl.org/NET/cidoc-crm/core#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dctype="http://purl.org/dc/dcmitype/" xmlns:dul="http://www.loa-cnr.it/ontologies/DUL.owl#" xmlns:event="http://purl.org/ontology/c4dm/event.owl#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:gr="http://purl.org/goodrelations/v1#" xmlns:lode="http://linkedevents.org/ontology/" xmlns:ncal="http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:schema="http://schema.org/" xmlns:ssso="http://purl.org/ontology/ssso#" xmlns:tio="http://purl.org/tio/ns#" xmlns:vann="http://purl.org/vocab/vann/">
   <rdf:Description rdf:about="http://purl.org/ontology/ssso">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
   </rdf:Description>
@@ -12,37 +12,46 @@
   <rdf:Description rdf:about="http://purl.org/ontology/ssso">
     <vann:preferredNamespacePrefix>ssso</vann:preferredNamespacePrefix>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
-    <rdfs:label>Service</rdfs:label>
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
+    <rdfs:label>ServiceEvent</rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://purl.org/dc/dcmitype/Event"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://purl.org/ontology/c4dm/event.owl#Event"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/prov#Activity"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://linkedevents.org/ontology/Event"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://www.loa-cnr.it/ontologies/DUL.owl#Event"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://purl.org/NET/cidoc-crm/core#E7_Activity"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#Event"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:subClassOf rdf:resource="http://schema.org/Event"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#Service">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
+    <rdfs:subClassOf rdf:resource="http://purl.org/tio/ns#Event"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
+    <rdfs:subClassOf rdf:resource="http://schema.org/IndividualProduct"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
+    <rdfs:subClassOf rdf:resource="http://purl.org/goodrelations/v1#Individual"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceEvent">
     <rdfs:isDefinedBy rdf:resource="http://purl.org/ontology/ssso"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceFulfillment">
@@ -52,7 +61,7 @@
     <rdfs:label>ServiceFulfillment</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceFulfillment">
-    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ServiceFulfillment">
     <rdfs:isDefinedBy rdf:resource="http://purl.org/ontology/ssso"/>
@@ -64,7 +73,7 @@
     <rdfs:label>ReservedService</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ReservedService">
-    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ReservedService">
     <owl:disjointWith rdf:resource="http://purl.org/ontology/ssso#PreparedService"/>
@@ -88,7 +97,7 @@
     <rdfs:label>ReservedService</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#PreparedService">
-    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#PreparedService">
     <owl:disjointWith rdf:resource="http://purl.org/ontology/ssso#ReservedService"/>
@@ -112,7 +121,7 @@
     <rdfs:label>ReservedService</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ReservedService">
-    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ReservedService">
     <owl:disjointWith rdf:resource="http://purl.org/ontology/ssso#ReservedService"/>
@@ -136,7 +145,7 @@
     <rdfs:label>ExecutedService</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ExecutedService">
-    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#ExecutedService">
     <owl:disjointWith rdf:resource="http://purl.org/ontology/ssso#ReservedService"/>
@@ -160,7 +169,7 @@
     <rdfs:label>RejectedService</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#RejectedService">
-    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:subClassOf rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#RejectedService">
     <owl:disjointWith rdf:resource="http://purl.org/ontology/ssso#ReservedService"/>
@@ -214,7 +223,7 @@
     <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceProvider"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
-    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
     <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#providedBy"/>
@@ -229,7 +238,7 @@
     <rdfs:label>providedBy</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
-    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
     <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceProvider"/>
@@ -250,7 +259,7 @@
     <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceConsumer"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
-    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
     <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#consumedBy"/>
@@ -265,7 +274,7 @@
     <rdfs:label>consumedBy</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
-    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
     <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceConsumer"/>
@@ -283,10 +292,10 @@
     <rdfs:label>nextService</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#nextService">
-    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#nextService">
-    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#nextService">
     <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#previousService"/>
@@ -301,10 +310,10 @@
     <rdfs:label>previousService</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#previousService">
-    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#previousService">
-    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#Service"/>
+    <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#previousService">
     <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#nextService"/>

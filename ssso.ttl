@@ -6,12 +6,14 @@
 @prefix dul: <http://www.loa-cnr.it/ontologies/DUL.owl#> .
 @prefix event: <http://purl.org/ontology/c4dm/event.owl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix gr: <http://purl.org/goodrelations/v1#> .
 @prefix lode: <http://linkedevents.org/ontology/> .
 @prefix ncal: <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix schema: <http://schema.org/> .
+@prefix tio: <http://purl.org/tio/ns#> .
 @prefix vann: <http://purl.org/vocab/vann/> .
 
 <http://purl.org/ontology/ssso>
@@ -23,46 +25,46 @@ ssso:ExecutedService
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "ExecutedService" ;
-    rdfs:subClassOf ssso:Service ;
+    rdfs:subClassOf ssso:ServiceEvent ;
     owl:disjointWith ssso:PreparedService, ssso:ProvidedService, ssso:RejectedService, ssso:ReservedService .
 
 ssso:PreparedService
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "ReservedService" ;
-    rdfs:subClassOf ssso:Service ;
+    rdfs:subClassOf ssso:ServiceEvent ;
     owl:disjointWith ssso:ExecutedService, ssso:ProvidedService, ssso:RejectedService, ssso:ReservedService .
 
 ssso:RejectedService
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "RejectedService" ;
-    rdfs:subClassOf ssso:Service ;
+    rdfs:subClassOf ssso:ServiceEvent ;
     owl:disjointWith ssso:ExecutedService, ssso:PreparedService, ssso:ProvidedService, ssso:ReservedService .
 
 ssso:ReservedService
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "ReservedService" ;
-    rdfs:subClassOf ssso:Service ;
+    rdfs:subClassOf ssso:ServiceEvent ;
     owl:disjointWith ssso:ExecutedService, ssso:PreparedService, ssso:ProvidedService, ssso:RejectedService, ssso:ReservedService .
-
-ssso:Service
-    a owl:Class ;
-    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
-    rdfs:label "Service" ;
-    rdfs:subClassOf lode:Event, crm:E7_Activity, dctype:Event, event:Event, schema:Event, dul:Event, ncal:Event, prov:Activity .
 
 ssso:ServiceConsumer
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "ServiceConsumer" .
 
+ssso:ServiceEvent
+    a owl:Class ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "ServiceEvent" ;
+    rdfs:subClassOf lode:Event, crm:E7_Activity, dctype:Event, gr:Individual, event:Event, tio:Event, schema:Event, schema:IndividualProduct, dul:Event, ncal:Event, prov:Activity .
+
 ssso:ServiceFulfillment
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "ServiceFulfillment" ;
-    rdfs:subClassOf ssso:Service .
+    rdfs:subClassOf ssso:ServiceEvent .
 
 ssso:ServiceProvider
     a owl:Class ;
@@ -76,33 +78,33 @@ ssso:TimeTravel
 
 ssso:consumedBy
     a owl:ObjectProperty ;
-    rdfs:domain ssso:Service, ssso:ServiceConsumer ;
+    rdfs:domain ssso:ServiceConsumer, ssso:ServiceEvent ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "consumed", "consumedBy" ;
-    rdfs:range ssso:Service, ssso:ServiceConsumer ;
+    rdfs:range ssso:ServiceConsumer, ssso:ServiceEvent ;
     owl:inverseOf ssso:consumed, ssso:consumedBy .
 
 ssso:nextService
     a owl:ObjectProperty ;
-    rdfs:domain ssso:Service ;
+    rdfs:domain ssso:ServiceEvent ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "nextService" ;
-    rdfs:range ssso:Service ;
+    rdfs:range ssso:ServiceEvent ;
     owl:inverseOf ssso:previousService .
 
 ssso:previousService
     a owl:ObjectProperty ;
-    rdfs:domain ssso:Service ;
+    rdfs:domain ssso:ServiceEvent ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "previousService" ;
-    rdfs:range ssso:Service ;
+    rdfs:range ssso:ServiceEvent ;
     owl:inverseOf ssso:nextService .
 
 ssso:providedBy
     a owl:ObjectProperty ;
-    rdfs:domain ssso:Service, ssso:ServiceProvider ;
+    rdfs:domain ssso:ServiceEvent, ssso:ServiceProvider ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "provided", "providedBy" ;
-    rdfs:range ssso:Service, ssso:ServiceProvider ;
+    rdfs:range ssso:ServiceEvent, ssso:ServiceProvider ;
     owl:inverseOf ssso:provided, ssso:providedBy .
 
