@@ -10,11 +10,11 @@ for typical status in fulfillment of a service.
 ## Status of this document
 
 This HTML document and the RDF serializations of the Simple Service Status
-Ontology ([`ssso.ttl`](ssso.ttl) in RDF/Turtle and [`ssss.owl`](ssso.owl) in
-RDF/XML) are generated automatically from a source file written in Pandoc
-Markdown syntax. Sources and updates are available at
-<http://github.com/gbv/ssso>. The current version of this document was last
-modified at GIT_REVISION_DATE with revision GIT_REVISION_HASH.
+Ontology ([**`ssso.ttl`**](ssso.ttl) in RDF/Turtle and
+[**`ssss.owl`**](ssso.owl) in RDF/XML) are generated automatically from a
+source file written in Pandoc Markdown syntax. Sources and updates are
+available at <http://github.com/gbv/ssso>. The current version of this document
+was last modified at GIT_REVISION_DATE with revision GIT_REVISION_HASH.
 
 ## Terminology
 
@@ -22,7 +22,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in RFC 2119.
 
-## Namespaces
+## Namespaces and ontology
 
 The URI namespace of this ontology is <http://purl.org/ontology/ssso#>. The
 namespace prefix `ssso` is recommeded. The URI of this ontology as a whole
@@ -31,7 +31,7 @@ is <http://purl.org/ontology/ssso>.
     @prefix ssso: <http://purl.org/ontology/ssso#> .
     @base         <http://purl.org/ontology/ssso> .
 
-The following namspace prefixes are used to refer to other ontologies:
+The following namspace prefixes are used to refer to [related ontologies]:
 
     @prefix crm:     <http://purl.org/NET/cidoc-crm/core#> .
     @prefix dctype:  <http://purl.org/dc/dcmitype/> .
@@ -39,15 +39,17 @@ The following namspace prefixes are used to refer to other ontologies:
     @prefix dul:     <http://www.loa-cnr.it/ontologies/DUL.owl#> .
     @prefix event:   <http://purl.org/ontology/c4dm/event.owl#> .
     @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+    @prefix gr:      <http://purl.org/goodrelations/v1#> .
     @prefix lode:    <http://linkedevents.org/ontology/> .
     @prefix ncal:    <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> .
     @prefix owl:     <http://www.w3.org/2002/07/owl#> .
     @prefix prov:    <http://www.w3.org/ns/prov#> .
     @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix schema:  <http://schema.org/> .
+    @prefix tio:     <http://purl.org/tio/ns#> .
     @prefix vann:    <http://purl.org/vocab/vann/> .
 
-## Ontology
+The Simple Service Status Ontology (SSSO) is defined in RDF/Turtle as following:
 
     <> a owl:Ontology ;
         rdfs:label "Simple Service Status Ontology" ;
@@ -56,27 +58,44 @@ The following namspace prefixes are used to refer to other ontologies:
 
 # Overview
 
-A [service fulfillment](#servicefulfillment) is modeled as set of service
-events, each being an instance of [Service](#service). Services of one service
-fulfillment should be connected in time with the properties
-[nextService](#nextservice) and [previousService](#previousservice).
+A [ServiceFulfillment] according to SSSO is modeled as set of service events,
+each being an instance of [ServiceEvent]. Examples of a [ServiceFulfillment]
+include the purchase of a product in a shop, the attendance at a performance,
+and the lending of a book in a library. In contrast to [related ontologies],
+each [ServiceEvent] and each [ServiceFulfillment] is a not a general offer but
+a particular activity in time. The activity typically takes place provided by
+at least one particular [ServiceProvider] (e.g. a shop, presenter, or library)
+and consumed by at least one [ServiceConsumer] (e.g. a customer, attendee, or
+patron). Multiple service event that belong to one service fulfillment should
+be connected in time with properties [nextService] and [previousService].
 
-Five typical service status are defined as disjoint subclasses:
+SSSO further defines five typical service status as disjoint subclasses of
+[ServiceEvent]. Actual service fulfillments do not need to implement all of 
+these service status.
 
-* A [ReservedService](#reservedservice) is in status *reserved*:\
+* A [ReservedService] is in status **reserved**:\
   the service has been accepted for execution but no action has taken place.
-* A [PreparedService](#preparedservice) is in status *prepared*:\
-  the execution is being prepared but is has not actually started.
-* A [ProvidedService](#providedservice) is in status *provided*:\
-  the service is ready to be executed on request.
-* A [ExecutedService](#executedservice) is in status *executed*:\
-  the service is actually being executed.
-* A [RejectedService](#rejectedservice) is in status *rejected*:\
-  the service has been refused or stopped.
+  Possible examples include an order of a product that must be paid in advance
+  but has not been paid yet, or the reservation of a book in a library that is 
+  not accesible yet.
 
-Actual services do not need to implement all of these service status. A service
-is typically connected to at least one [ServiceProvider](#provider) and at
-least one [ServiceConsumer](#serviceconsumer). 
+* A [PreparedService] is in status **prepared**:\
+  the execution is being prepared but is has not actually started. A possible
+  example is a product being sent to the customer.
+
+* A [ProvidedService] is in status **provided**:\
+  the service is ready to be executed on request. An example is a product
+  that is ready to be picked up by a customer.
+
+* A [ExecutedService] is in status **executed**:\
+  the service is actually being executed. For instance this activity can be
+  the event when a bought product is handed over to the customer, the time
+  of a performance, or the time a book is held on loan by a patron.
+
+* A [RejectedService] is in status **rejected**:\
+  the service has been refused or stopped. A possible example is a 
+  canceled contract.
+
 
 The following diagram illustrates the classes and properties definied in this ontology:
 
@@ -102,32 +121,30 @@ The following diagram illustrates the classes and properties definied in this on
                                dcterms:hasPart / dcterms:partOf
 ```
 
-This ontology does not make any assumptions about types of services. Examples
-of services include buying a product from a shop, lending a book from a
-library, participating in a performance etc. To define service types, define a
-subclass of [Service](#service).  The class [TimeTravel](#timetravel) is
+This ontology does not make any assumptions about types of services.  To define
+service types, define a subclass of [ServiceEvent].  The class [TimeTravel] is
 included in SSSO as artifical example of a service type.
 
 # Classes
 
-## Service
+## ServiceEvent
 
-A service is an Event or activity. Several RDF ontologies have been proposed 
-for such entities, maybe because ontology engineers cannot agree on semantics:
+[ServiceEvent]: #ServiceEvent
 
-* Dublin Core Metadata Terms
-* Event ontology
-* Provenance ontology
-* LODE ontology (Linking Open Descriptions of Events)
-* DOLCE+DnS Ultralite ontology
-* CIDOC-CRM expressed in OWL
-* Schema.org Ontology
-* NEPOMUK Calendar Ontology
+A service event is an activity that takes places during a specific time. The
+event can be connected to one or more [ServiceProvider] with property
+[providedBy] and to one or more [ServiceConsumer] with property [consumedBy].
 
-An SSSO Service is subclass of all of them to make happy multiple communities.
+Several [related ontologies] have been proposed to model events or activities
+with suprisingly low interconnections. SSSO is agnostic to these ontologies, so
+[ServiceEvent] is related to classes in all of them to make happy multiple
+communities. A [ServiceEvent] is further subclass of [schema:IndividualProduct] 
+and [gr:Individual], which imply [schema:Product] and [gr:ProductOrService].
+Nevertheless, SSSO does not make any assumptions whether a [ServiceEvent] is
+actually sold or just provided for free.
 
-    ssso:Service a owl:Class ;
-        rdfs:label "Service" ;
+    ssso:ServiceEvent a owl:Class ;
+        rdfs:label "ServiceEvent" ;
         rdfs:subClassOf 
             dctype:Event , 
             event:Event , 
@@ -136,47 +153,58 @@ An SSSO Service is subclass of all of them to make happy multiple communities.
             dul:Event ,
             crm:E7_Activity ,
             ncal:Event ,
-            schema:Event ;
+            schema:Event ,
+            tio:Event ,
+            schema:IndividualProduct ,
+            gr:Individual ;
             rdfs:isDefinedBy <> .
 
-Service [providers](#serviceprovider) can be connected to a service with
-property [providedBy](#providedby) and service [consumers](#serviceconsumer)
-can be connected to a service with property [consumedBy](#consumedBy).
+SSSO does not define (yet another) set of properties to relate a service event
+to the time when it started and/or ended. One should better use existing
+properties from related ontologies, such as:
 
-The time when a service started and/or ended can be expressed as instance of
-`xsd:dateTime` or `xsd:date` with properties `prov:startedAtTime` or
-`schema:startDate` and `prov:endedAtTime` or `schema:endDate` respectively. The
-starting time must be equal to or earlier than the ending time (unless the
-service is an instance of [TimeTravel](#timetravel) and
-[ExecutedService](#executedservice)).
+* [schema:startDate] and [schema:endDate]
+* [prov:startedAtTime](#) and [prov:endedAtTime](#)
+* [tio:starts](#http://purl.org/tio/ns#starts) and [tio:ends](#http://purl.org/tio/ns#ends)
+* [lode:atTime](#http://linkedevents.org/ontology/#term-atTime) or
+  [lode:circa](#http://linkedevents.org/ontology/#term-circa)
+* [dcterms:date](#http://dublincore.org/documents/dcmi-terms/#terms-date)
+
+The property values SHOULD be modeled as instance of `xsd:dateTime` or
+`xsd:date`. The starting time of a service event (if given) MUST be equal to or
+earlier than the ending time of the same service event (unless the service is
+an instance of [TimeTravel] and [ExecutedService]).
 
 
 ## ServiceFulfillment
 
-A Service fulfillment is a [Service](#service) that consists of one or more
-parts. Each of these parts is also a [Service](#service) and connected to the
-service fulfillment by `dcterms:partOf`. Vice versa, each instance of
-[Service](#service) is also instance of [ServiceFulfillment](#servicefulfillment) 
-if connected to another [Service](#service) by `dcterms:hasPart`. The parts of
-a service fulfillment SHOULD be connected to each other by [nextService](#nextservice) 
-and [previousService](#previousservice).
+[ServiceFulfillment]: #servicefulfillment
+
+A Service fulfillment is a [ServiceEvent] that consists of one or more parts. Each
+of these parts is also a [ServiceEvent] and connected to the service fulfillment by
+`dcterms:partOf`. Vice versa, each instance of [ServiceEvent] is also instance of
+[ServiceFulfillment] if connected to another [ServiceEvent] by [dcterms:hasPart].
+The parts of a service fulfillment SHOULD be connected to each other by
+[nextService] and [previousService].
 
     ssso:ServiceFulfillment a owl:Class ;
         rdfs:label "ServiceFulfillment" ;
-        rdfs:subClassOf ssso:Service ;
+        rdfs:subClassOf ssso:ServiceEvent ;
         rdfs:isDefinedBy <> .
 
 ## ReservedService
 
-A reserved service is a [Service](#service) that has been accepted by a service
-provider for execution but not prepared yet. The reserved service has neither
-been prepared by a service provider but only queued for further processing.
-A typical example is a product order that has been placed but not payed yet or
-a payed ticket to a theater performance.
+[ReservedService]: #reservedService
+
+A reserved service is a [ServiceEvent] that has been accepted by a service provider
+for execution but not prepared yet. The reserved service has neither been
+prepared by a service provider but only queued for further processing.  A
+typical example is a product order that has been placed but not payed yet or a
+payed ticket to a theater performance.
 
     ssso:ReservedService a owl:Class ;
         rdfs:label "ReservedService" ;
-        rdfs:subClassOf ssso:Service ;
+        rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith 
           ssso:PreparedService, ssso:ProvidedService, 
           ssso:ExecutedService, ssso:RejectedService ;
@@ -184,12 +212,14 @@ a payed ticket to a theater performance.
 
 ## PreparedService
 
+[PreparedService]: #preparedservice
+
 A prepared service is being prepared to be provided or executed. A typical example 
 is a product that is being send to its consumer.
 
     ssso:PreparedService a owl:Class ;
         rdfs:label "ReservedService" ;
-        rdfs:subClassOf ssso:Service ;
+        rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:ProvidedService, 
           ssso:ExecutedService, ssso:RejectedService ;
@@ -197,12 +227,14 @@ is a product that is being send to its consumer.
 
 ## ProvidedService
 
+[ProvidedService]: #providedservice
+
 A provided service is being made available for immediate execution. A typical example is a
 product that is ready for being picked up by its consumer.
 
     ssso:ReservedService a owl:Class ;
         rdfs:label "ReservedService" ;
-        rdfs:subClassOf ssso:Service ;
+        rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:PreparedService, 
           ssso:ExecutedService, ssso:RejectedService ;
@@ -210,12 +242,14 @@ product that is ready for being picked up by its consumer.
 
 ## ExecutedService
 
+[ExecutedService]: #executedservice
+
 An executed service represents the actual execution event of fulfillment of a
 service. A typical example is a theater performance that is being played.
 
     ssso:ExecutedService a owl:Class ;
         rdfs:label "ExecutedService" ;
-        rdfs:subClassOf ssso:Service ;
+        rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:PreparedService, 
           ssso:ProvidedService, ssso:RejectedService ;
@@ -223,13 +257,15 @@ service. A typical example is a theater performance that is being played.
 
 ## RejectedService
 
-A rejected service has been rejected by its provider or by its consumer. The
-rejection may be infinite or it may be followed by another service when the
-reason for rejection has been removed.
+[RejectedService]: #rejectedservice
+
+A rejected service is a [ServiceEvent] that has been rejected by its provider or by
+its consumer. The rejection may be infinite or it may be followed by another
+service when the reason for rejection has been removed.
 
     ssso:RejectedService a owl:Class ;
         rdfs:label "RejectedService" ;
-        rdfs:subClassOf ssso:Service ;
+        rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:PreparedService, 
           ssso:ProvidedService, ssso:ExecutedService ;
@@ -237,10 +273,12 @@ reason for rejection has been removed.
 
 ## ServiceProvider
 
-A service provider is an entity that is responsible for providing a
-[Service](#service).  Typical providers are instances of `foaf:Agent`, such as
-organizations or people, but the Simple Service Status Ontology does not put
-any constraints on the nature of providers.
+[ServiceProvider]: #serviceprovider
+
+A service provider is an entity that is responsible for providing a [ServiceEvent].
+Typical providers, such as organizations and people, are also instances of
+[foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any constraints on
+the nature of providers.
 
     ssso:ServiceProvider a owl:Class ;
         rdfs:label "ServiceProvider" ;
@@ -248,16 +286,20 @@ any constraints on the nature of providers.
 
 ## ServiceConsumer
 
-A service consumer is an entity that is requesting or consuming a
-[Service](#service).  Typical consumers are instances of `foaf:Agent`, such as
-organizations or people, but the Simple Service Status Ontology does not put
-any constraints on the nature of consumers.
+[ServiceConsumer]: #serviceconsumer
+
+A service consumer is an entity that is requesting or consuming a [ServiceEvent].
+Typical consumers, such as organizations and people, are instances of
+[foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any constraints on
+the nature of consumers.
 
     ssso:ServiceConsumer a owl:Class ;
         rdfs:label "ServiceConsumer" ;
         rdfs:isDefinedBy <> .
 
 ## TimeTravel
+
+[TimeTravel]: #timetravel
 
 An event which ends before it has been started. Details have been implemented
 in the future.
@@ -270,77 +312,85 @@ in the future.
 
 ## provided
 
-Relates a [ServiceProvider](#serviceprovider) instance to a
-[Service](#service) instance .
+[provided]: #provided
+
+Relates a [ServiceProvider] instance to a [ServiceEvent] instance .
 
     ssso:providedBy a owl:ObjectProperty ;
         rdfs:label "provided" ;
         rdfs:domain ssso:ServiceProvider ;
-        rdfs:range ssso:Service ;
+        rdfs:range ssso:ServiceEvent ;
         owl:inverseOf ssso:providedBy ;
         rdfs:isDefinedBy <> .
 
 ## providedBy
 
-Relates a [Service](#service) instance to a [ServiceProvider](#serviceprovider)
-instance.
+[providedBy]: #providedBy
+
+Relates a [ServiceEvent] instance to a [ServiceProvider] instance.
 
     ssso:providedBy a owl:ObjectProperty ;
         rdfs:label "providedBy" ;
-        rdfs:domain ssso:Service ;
+        rdfs:domain ssso:ServiceEvent ;
         rdfs:range ssso:ServiceProvider ;
         owl:inverseOf ssso:provided ;
         rdfs:isDefinedBy <> .
 
 ## consumed
 
-Relates a [ServiceConsumer](#serviceconsumer) instance to a [Service](#service)
-instance.
+[consumed]: #consumed
+
+Relates a [ServiceConsumer] instance to a [ServiceEvent] instance.
 
     ssso:consumedBy a owl:ObjectProperty ;
         rdfs:label "consumed" ;
         rdfs:domain ssso:ServiceConsumer ;
-        rdfs:range ssso:Service ;
+        rdfs:range ssso:ServiceEvent ;
         owl:inverseOf ssso:consumedBy ;
         rdfs:isDefinedBy <> .
 
 ## consumedBy
 
-Relates a [Service](#service) instance to a [ServiceConsumer](#serviceconsumer)
-instance.
+[consumedBy]: #consumedBy
+
+Relates a [ServiceEvent] instance to a [ServiceConsumer] instance.
 
     ssso:consumedBy a owl:ObjectProperty ;
         rdfs:label "consumedBy" ;
-        rdfs:domain ssso:Service ;
+        rdfs:domain ssso:ServiceEvent ;
         rdfs:range ssso:ServiceConsumer ;
         owl:inverseOf ssso:consumed ;
         rdfs:isDefinedBy <> .
 
 ## nextService
 
-Relates a service instances to another service instance which is following in time.
-The starting time of the following service instance MUST be equal or later then the
-ending time of the previous service (unless one of the services is an instance of 
-[TimeTravel](#timetravel) and [ExecutedService](#executedservice)).
+[nextService]: #nextservice
+
+Relates a service instances to another service instance which is following in
+time.  The starting time of the following service instance MUST be equal or
+later then the ending time of the previous service (unless one of the services
+is an instance of [TimeTravel] and [ExecutedService]).
 
     ssso:nextService a owl:ObjectProperty ;
         rdfs:label "nextService" ;
-        rdfs:domain ssso:Service ;
-        rdfs:range  ssso:Service ;
+        rdfs:domain ssso:ServiceEvent ;
+        rdfs:range  ssso:ServiceEvent ;
         owl:inverseOf ssso:previousService ;
         rdfs:isDefinedBy <> .
 
 ## previousService
 
-Relates a service instances to another service instance which is preceding in time.
-The ending time of the previousg service instance MUST be equal or earlier then the
-starting time of the next service  (unless one of the services is an instance of 
-[TimeTravel](#timetravel) and [ExecutedService](#executedservice)).
+[previousService]: #previousservice
+
+Relates a service instances to another service instance which is preceding in
+time.  The ending time of the previousg service instance MUST be equal or
+earlier then the starting time of the next service  (unless one of the services
+is an instance of [TimeTravel] and [ExecutedService]).
 
     ssso:previousService a owl:ObjectProperty ;
         rdfs:label "previousService" ;
-        rdfs:domain ssso:Service ;
-        rdfs:range  ssso:Service ;
+        rdfs:domain ssso:ServiceEvent ;
+        rdfs:range  ssso:ServiceEvent ;
         owl:inverseOf ssso:nextService ;
         rdfs:isDefinedBy <> .
 
@@ -350,12 +400,12 @@ The following inference rules apply:
 
 ```
 # domains and ranges
-{ $p ssso:provided $s }        => { $p a ssso:ServiceProvider . $s a ssso:Service } .
-{ $s ssso:providedBy $p }      => { $p a ssso:ServiceProvider . $s a ssso:Service } .
-{ $c ssso:consumed $s }        => { $c a ssso:ServiceConsumer . $s a ssso:Service } .
-{ $s ssso:consumedBy $c }      => { $c a ssso:ServiceConsumer . $s a ssso:Service } .
-{ $a ssso:nextService $b }     => { $a a ssso:Service . $b a ssso:Service } .
-{ $a ssso:previousService $b } => { $a a ssso:Service . $b a ssso:Service } .
+{ $p ssso:provided $s }        => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
+{ $s ssso:providedBy $p }      => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
+{ $c ssso:consumed $s }        => { $c a ssso:ServiceConsumer . $s a ssso:ServiceEvent } .
+{ $s ssso:consumedBy $c }      => { $c a ssso:ServiceConsumer . $s a ssso:ServiceEvent } .
+{ $a ssso:nextService $b }     => { $a a ssso:ServiceEvent . $b a ssso:ServiceEvent } .
+{ $a ssso:previousService $b } => { $a a ssso:ServiceEvent . $b a ssso:ServiceEvent } .
 
 # inverse properties
 { $a dcterms:hasPart $b }      <=> { $b dcterms:partOf $a } .
@@ -364,16 +414,89 @@ The following inference rules apply:
 { $a ssso:previousService $b } <=> { $b ssso:nextService $a } .
 
 # subclasses
-{ $s a ssso:ServiceFulfillment } => { $s a ssso:Service } .
-{ $s a ssso:ReservedService }    => { $s a ssso:Service } .
-{ $s a ssso:PreparedService }    => { $s a ssso:Service } .
-{ $s a ssso:ProvidedService }    => { $s a ssso:Service } .
-{ $s a ssso:ExecutedService }    => { $s a ssso:Service } .
-{ $s a ssso:RejectedService }    => { $s a ssso:Service } .
+{ $s a ssso:ServiceFulfillment } => { $s a ssso:ServiceEvent } .
+{ $s a ssso:ReservedService }    => { $s a ssso:ServiceEvent } .
+{ $s a ssso:PreparedService }    => { $s a ssso:ServiceEvent } .
+{ $s a ssso:ProvidedService }    => { $s a ssso:ServiceEvent } .
+{ $s a ssso:ExecutedService }    => { $s a ssso:ServiceEvent } .
+{ $s a ssso:RejectedService }    => { $s a ssso:ServiceEvent } .
 
 # service fulfillment
-{ $a a ssso:Service . $b a ssso:Service . $a dcterms:hasPart $b } => { $a a ssso:ServiceFulfillment } .
+{ $a a ssso:ServiceEvent . $b a ssso:ServiceEvent . $a dcterms:hasPart $b } => { $a a ssso:ServiceFulfillment } .
 ```
+
+# Related ontologies
+
+[related ontologies]: #related-ontologies
+
+The core class [ServiceEvent] is subclass of event and activity classes from several
+related ontologies. The large number of similar classes may result from an inability 
+of ontology engineers to agree on semantics or the dislike to refer to ontologies that
+have been designed by someone else. The related classes and ontologies include:
+
+* [dctype:Event] from Dublin Core Metadata Terms
+* [schema:Event] from Schema.org Ontology
+* [event:Event] from Event ontology
+* prov:Activity from Provenance ontology
+* E7_Activity from the [CIDOC Conceptual Reference Model](http://www.cidoc-crm.org/) expressed in OWL
+* lode:Event from LODE ontology (Linking Open Descriptions of Events)
+* dul:Event from DOLCE+DnS Ultralite ontology
+* ncal:Event from NEPOMUK Calendar Ontology
+* tio:Event from Tickets ontology
+
+SSSO further makes use of the Dublin Core Metadata Terms [dcterms:hasPart] and
+[dcterms:partOf].
+
+The relation between SSSO, Schema.org, and [GoodRelations] can best be
+described by some examples (taken from [GoodRelations], licensed under CC-BY-SA
+3.0):
+
+* "Peter Miller offers to repair TV sets made by Siemens" is an instance of
+  [gr:Offering] and [schema:Offer]. "Peter Miller repairs a TV set for Lena 
+  Meyer" is an instance of [ServiceEvent], [gr:Individual], 
+  [gr:ProductOrService], and [schema:IndividualProduct].
+* "Volkswagen Innsbruck sells a particular instance of a Volkswagen Golf at 
+  $10,000" is an instance of [gr:Offering] and [schema:Offer]. When a 
+  particular customer buys one of this cars, it is an instance of [ServiceEvent],
+  [gr:Individual], [gr:ProductOrService], and [schema:IndividualProduct].
+* An offer for a "Ticket for Bryan Adams at the Verizon Wireless Amphitheatre" 
+  is an instance of [gr:Offering] and [schema:Offer]. The "purchase of a ticket 
+  and attendence of the concert by Ada Smith and her friend" is an instance of
+  [ServiceFulfillment], [ServiceEvent], [gr:Individual], and 
+  [schema:IndividualProduct]. The ticket (an instance of [tio:ActualTicket]) and 
+  the actual concert are additional instances of [ServiceEvent] connected to 
+  the [ServiceFulfillment] with [dcterms:partOf].
+
+In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
+[ServiceFulfillment]), which is typically also an instance of [gr:Individual],
+[gr:ProductOrService], and [schema:Product].
+
+
+[dcterms:hasPart]: http://dublincore.org/documents/dcmi-terms/#terms-hasPart
+[dcterms:partOf]: http://dublincore.org/documents/dcmi-terms/#terms-partOf
+
+[dctype:Event]: http://dublincore.org/documents/dcmi-terms/#dcmitype-Event
+[dctype:Service]: http://dublincore.org/documents/dcmi-terms/#dcmitype-Service
+
+[event:Event]: http://motools.sourceforge.net/event/event.html#term_Event
+
+[foaf:Agent]: http://xmlns.com/foaf/spec/#term_Agent
+
+[gr:BusinessEntity]: http://purl.org/goodrelations/v1#BusinessEntity
+[gr:Individual]: http://purl.org/goodrelations/v1#Individual
+[gr:Offering]: http://purl.org/goodrelations/v1#Offering
+[gr:ProductOrService]: http://purl.org/goodrelations/v1#ProductOrService
+[gr:offers]: http://purl.org/goodrelations/v1#offers
+[gr:seeks]: http://purl.org/goodrelations/v1#seeks
+
+[schema:Event]: http://schema.org/Event
+[schema:Product]: http://schema.org/Product
+[schema:IndividualProduct]: http://schema.org/IndividualProduct
+[schema:Offer]: http://schema.org/Offer
+[schema:startDate]: http://schema.org/Event
+[schema:endDate]: http://schema.org/Event
+
+[GoodRelations]: http://www.heppnetz.de/projects/goodrelations/
 
 # References
 
@@ -407,6 +530,10 @@ of these ontologies when using SSSO.
   *<http://ontologydesignpatterns.org/wiki/Ontology:DOLCE+DnS_Ultralite>*.
 * *CIDOC CRM in OWL 2*.
   <http://bloody-byte.net/rdf/cidoc-crm/>.
+* *GoodRelations*.
+  <http://purl.org/goodrelations/>.
+* *Tickets Ontology*
+  <http://purl.org/tio>.
 
 SSSO was motivated by the design of an ontology for the Patrons Account
 Information API (PAIA): <http://purl.org/ontology/paia>

@@ -5,13 +5,13 @@ namespace is <http://purl.org/ontology/ssso#>.
 
 # Synopsis
 
-According to the Simple Service Status Ontology, a **Service** is an event with
-a specific starting time and/or ending time. Related services can be connected
-to each other in time as **nextService** and **previousService**. Each service
-can be provided by one ore more **ServiceProvider** and consumed by one or more
-**ServiceConsumer**. A **ServiceFulfillment** is modeled by a set of connected
-services. For this purpose SSSO defines five specific disjoint service status,
-**ReservedService**, **PreparedService**, **ProvidedService**,
+According to the Simple Service Status Ontology, a **ServiceEvent** is an event
+with a specific starting time and/or ending time. Related service events can be
+connected to each other in time as **nextService** and **previousService**.
+Each service event can be provided by one ore more **ServiceProvider** and 
+consumed by one or more **ServiceConsumer**. A **ServiceFulfillment** is modeled 
+by a set of connected services. For this purpose SSSO defines five specific disjoint
+service status, **ReservedService**, **PreparedService**, **ProvidedService**,
 **ExecutedService**, and **RejectedService**.
 
 The following diagram illustrates the classes and properties definied in this ontology:
@@ -37,6 +37,7 @@ The following diagram illustrates the classes and properties definied in this on
                                              ------
                                dcterms:hasPart / dcterms:partOf
 ```
+
 
 # Feedback
 
