@@ -2,6 +2,7 @@
 @prefix ssso: <http://purl.org/ontology/ssso#> .
 @prefix crm: <http://purl.org/NET/cidoc-crm/core#> .
 @prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix dul: <http://www.loa-cnr.it/ontologies/DUL.owl#> .
 @prefix event: <http://purl.org/ontology/c4dm/event.owl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -57,6 +58,12 @@ ssso:ServiceConsumer
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
     rdfs:label "ServiceConsumer" .
 
+ssso:ServiceFulfillment
+    a owl:Class ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "ServiceFulfillment" ;
+    rdfs:subClassOf ssso:Service .
+
 ssso:ServiceProvider
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
@@ -83,7 +90,7 @@ ssso:nextService
     rdfs:range ssso:Service ;
     owl:inverseOf ssso:previousService .
 
-ssso:previous
+ssso:previousService
     a owl:ObjectProperty ;
     rdfs:domain ssso:Service ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
