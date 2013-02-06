@@ -16,6 +16,11 @@ Markdown syntax. Sources and updates are available at
 <http://github.com/gbv/ssso>. The current version of this document was last
 modified at GIT_REVISION_DATE with revision GIT_REVISION_HASH.
 
+## Terminology
+
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in RFC 2119.
 
 ## Namespaces
 
@@ -28,18 +33,19 @@ is <http://purl.org/ontology/ssso>.
 
 The following namspace prefixes are used to refer to other ontologies:
 
-    @prefix crm:    <http://purl.org/NET/cidoc-crm/core#> .
-    @prefix dctype: <http://purl.org/dc/dcmitype/> .
-    @prefix dul:    <http://www.loa-cnr.it/ontologies/DUL.owl#> .
-    @prefix event:  <http://purl.org/ontology/c4dm/event.owl#> .
-    @prefix foaf:   <http://xmlns.com/foaf/0.1/> .
-    @prefix lode:   <http://linkedevents.org/ontology/> .
-    @prefix ncal:   <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> .
-    @prefix owl:    <http://www.w3.org/2002/07/owl#> .
-    @prefix prov:   <http://www.w3.org/ns/prov#> .
-    @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
-    @prefix schema: <http://schema.org/> .
-    @prefix vann:   <http://purl.org/vocab/vann/> .
+    @prefix crm:     <http://purl.org/NET/cidoc-crm/core#> .
+    @prefix dctype:  <http://purl.org/dc/dcmitype/> .
+    @prefix dcterms: <http://purl.org/dc/terms/> .
+    @prefix dul:     <http://www.loa-cnr.it/ontologies/DUL.owl#> .
+    @prefix event:   <http://purl.org/ontology/c4dm/event.owl#> .
+    @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+    @prefix lode:    <http://linkedevents.org/ontology/> .
+    @prefix ncal:    <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> .
+    @prefix owl:     <http://www.w3.org/2002/07/owl#> .
+    @prefix prov:    <http://www.w3.org/ns/prov#> .
+    @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix schema:  <http://schema.org/> .
+    @prefix vann:    <http://purl.org/vocab/vann/> .
 
 ## Ontology
 
@@ -50,49 +56,57 @@ The following namspace prefixes are used to refer to other ontologies:
 
 # Overview
 
-A service fulfillment is modeled as chain of service events, each being an
-instance of [Service](#service). Services can be chained in time with the
-properties [nextService](#nextservice) and [previousService](#previousservice).
+A [service fulfillment](#servicefulfillment) is modeled as set of service
+events, each being an instance of [Service](#service). Services of one service
+fulfillment should be connected in time with the properties
+[nextService](#nextservice) and [previousService](#previousservice).
 
 Five typical service status are defined as disjoint subclasses:
 
 * A [ReservedService](#reservedservice) is in status *reserved*:\
-  the service has been accepted for fulfillment but no action has taken place.
+  the service has been accepted for execution but no action has taken place.
 * A [PreparedService](#preparedservice) is in status *prepared*:\
-  the fulfillment is being prepared but is has not actually started.
+  the execution is being prepared but is has not actually started.
 * A [ProvidedService](#providedservice) is in status *provided*:\
-  the service is ready to be fulfilled on request.
+  the service is ready to be executed on request.
 * A [ExecutedService](#executedservice) is in status *executed*:\
-  the service is actually being fulfilled.
+  the service is actually being executed.
 * A [RejectedService](#rejectedservice) is in status *rejected*:\
   the service has been refused or stopped.
 
 Actual services do not need to implement all of these service status. A service
-is typically connected to at least one service [ServiceProvider](#provider) and
-at least one service [ServiceConsumer](#serviceconsumer). 
+is typically connected to at least one [ServiceProvider](#provider) and at
+least one [ServiceConsumer](#serviceconsumer). 
 
 The following diagram illustrates the classes and properties definied in this ontology:
 
 ```
                                    nextService / previousService
-                                             -----
-                                            |     |
-                                            v     v
-   +-----------------+   provided     +-----------------+   consumedBy   +-----------------+
-   | ServiceProvider |--------------->|     Service     |--------------->| ServiceConsumer |
-   |                 |<---------------|                 |<---------------|                 |
-   +-----------------+   providedBy   | ReservedService |   consumed     +-----------------+
-                                      | PreparedService |
-                                      | ProvidedService |
-                                      | ExecutedService |
-                                      | RejectedService |
-                                      +-----------------+
+                                              ------
+                                             |      |
+                                             v      v
+   +-----------------+   provided     +--------------------+   consumedBy   +-----------------+
+   | ServiceProvider |--------------->|     Service        |--------------->| ServiceConsumer |
+   |                 |<---------------|                    |<---------------|                 |
+   +-----------------+   providedBy   |   ReservedService  |   consumed     +-----------------+
+                                      |   PreparedService  |
+                                      |   ProvidedService  |
+                                      |   ExecutedService  |
+                                      |   RejectedService  |
+                                      |                    |
+                                      | ServiceFulfillment |
+                                      +-----^--------------+
+                                            |      ^
+                                            |      |
+                                             ------
+                               dcterms:hasPart / dcterms:partOf
 ```
 
 This ontology does not make any assumptions about types of services. Examples
-include buying a product from a shop and lending a book from a library. The
-class [TimeTravel](#timetravel) is included as artifical example of a service
-type.
+of services include buying a product from a shop, lending a book from a
+library, participating in a performance etc. To define service types, define a
+subclass of [Service](#service).  The class [TimeTravel](#timetravel) is
+included in SSSO as artifical example of a service type.
 
 # Classes
 
@@ -136,6 +150,21 @@ starting time must be equal to or earlier than the ending time (unless the
 service is an instance of [TimeTravel](#timetravel) and
 [ExecutedService](#executedservice)).
 
+
+## ServiceFulfillment
+
+A Service fulfillment is a [Service](#service) that consists of one or more
+parts. Each of these parts is also a [Service](#service) and connected to the
+service fulfillment by `dcterms:partOf`. Vice versa, each instance of
+[Service](#service) is also instance of [ServiceFulfillment](#servicefulfillment) 
+if connected to another [Service](#service) by `dcterms:hasPart`. The parts of
+a service fulfillment SHOULD be connected to each other by [nextService](#nextservice) 
+and [previousService](#previousservice).
+
+    ssso:ServiceFulfillment a owl:Class ;
+        rdfs:label "ServiceFulfillment" ;
+        rdfs:subClassOf ssso:Service ;
+        rdfs:isDefinedBy <> .
 
 ## ReservedService
 
@@ -292,7 +321,7 @@ instance.
 Relates a service instances to another service instance which is following in time.
 The starting time of the following service instance MUST be equal or later then the
 ending time of the previous service (unless one of the services is an instance of 
-[ExecutedService](#executedservice) and [TimeTravel](#timetravel)).
+[TimeTravel](#timetravel) and [ExecutedService](#executedservice)).
 
     ssso:nextService a owl:ObjectProperty ;
         rdfs:label "nextService" ;
@@ -305,21 +334,56 @@ ending time of the previous service (unless one of the services is an instance o
 
 Relates a service instances to another service instance which is preceding in time.
 The ending time of the previousg service instance MUST be equal or earlier then the
-starting time of the next service (unless one of the services is an instance of 
-[ExecutedService](#executedservice) and [TimeTravel](#timetravel)).
+starting time of the next service  (unless one of the services is an instance of 
+[TimeTravel](#timetravel) and [ExecutedService](#executedservice)).
 
-    ssso:previous a owl:ObjectProperty ;
+    ssso:previousService a owl:ObjectProperty ;
         rdfs:label "previousService" ;
         rdfs:domain ssso:Service ;
         rdfs:range  ssso:Service ;
         owl:inverseOf ssso:nextService ;
         rdfs:isDefinedBy <> .
 
+# Rules
+
+The following inference rules apply:
+
+```
+# domains and ranges
+{ $p ssso:provided $s }        => { $p a ssso:ServiceProvider . $s a ssso:Service } .
+{ $s ssso:providedBy $p }      => { $p a ssso:ServiceProvider . $s a ssso:Service } .
+{ $c ssso:consumed $s }        => { $c a ssso:ServiceConsumer . $s a ssso:Service } .
+{ $s ssso:consumedBy $c }      => { $c a ssso:ServiceConsumer . $s a ssso:Service } .
+{ $a ssso:nextService $b }     => { $a a ssso:Service . $b a ssso:Service } .
+{ $a ssso:previousService $b } => { $a a ssso:Service . $b a ssso:Service } .
+
+# inverse properties
+{ $a dcterms:hasPart $b }      <=> { $b dcterms:partOf $a } .
+{ $p ssso:provided $s }        <=> { $s ssso:providedBy $p } .
+{ $c ssso:consumed $s }        <=> { $s ssso:consumedBy $p } .
+{ $a ssso:previousService $b } <=> { $b ssso:nextService $a } .
+
+# subclasses
+{ $s a ssso:ServiceFulfillment } => { $s a ssso:Service } .
+{ $s a ssso:ReservedService }    => { $s a ssso:Service } .
+{ $s a ssso:PreparedService }    => { $s a ssso:Service } .
+{ $s a ssso:ProvidedService }    => { $s a ssso:Service } .
+{ $s a ssso:ExecutedService }    => { $s a ssso:Service } .
+{ $s a ssso:RejectedService }    => { $s a ssso:Service } .
+
+# service fulfillment
+{ $a a ssso:Service . $b a ssso:Service . $a dcterms:hasPart $b } => { $a a ssso:ServiceFulfillment } .
+```
+
 # References
 
-<!-- ## Normative Reference
+## Normative Reference
 
-...-->
+* [RFC 2119] S. Bradner: *Key words for use in RFCs to Indicate Requirement Levels*. 
+  March 1997 <http://tools.ietf.org/html/rfc2119>.
+
+* [RFC 2396] T. Berners-Lee et al.: *Uniform Resource Identifiers (URI): Generic Syntax*.
+  August 1998 <http://tools.ietf.org/html/rfc2396>.
 
 ## Informative References
 
@@ -337,7 +401,7 @@ of these ontologies when using SSSO.
   <http://www.w3.org/TR/prov-o/> .
 * *Linking Open Descriptions of Events*.
   <http://linkedevents.org/ontology/> .
-* Antoni Mylka (Editor). 2007. *NEPOMUK Calendar Ontology*.
+* *NEPOMUK Calendar Ontology*.
   <http://www.semanticdesktop.org/ontologies/ncal/> .
 * *DOLCE+DnS Ultralite (DUL) ontology*. 
   *<http://ontologydesignpatterns.org/wiki/Ontology:DOLCE+DnS_Ultralite>*.
