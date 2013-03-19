@@ -9,12 +9,12 @@ for typical status in fulfillment of a service.
 
 ## Status of this document
 
-This HTML document and the RDF serializations of the Simple Service Status
-Ontology ([**`ssso.ttl`**](ssso.ttl) in RDF/Turtle and
-[**`ssss.owl`**](ssso.owl) in RDF/XML) are generated automatically from a
-source file written in Pandoc Markdown syntax. Sources and updates are
-available at <http://github.com/gbv/ssso>. The current version of this document
-was last modified at GIT_REVISION_DATE with revision GIT_REVISION_HASH.
+This HTML document and RDF serializations of the Simple Service Status Ontology
+([**`ssso.ttl`**](ssso.ttl) in RDF/Turtle and [**`ssss.owl`**](ssso.owl) in
+RDF/XML) are generated automatically from a source file written in Pandoc
+Markdown syntax. Sources and updates are available at
+<http://github.com/gbv/ssso>. The current version of this document was last
+modified at GIT_REVISION_DATE with revision GIT_REVISION_HASH.
 
 ## Terminology
 
@@ -500,12 +500,12 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 
 # References
 
-## Normative Reference
+## Normative References
 
-* [RFC 2119] S. Bradner: *Key words for use in RFCs to Indicate Requirement Levels*. 
+* **[RFC 2119]** S. Bradner: *Key words for use in RFCs to Indicate Requirement Levels*. 
   March 1997 <http://tools.ietf.org/html/rfc2119>.
 
-* [RFC 2396] T. Berners-Lee et al.: *Uniform Resource Identifiers (URI): Generic Syntax*.
+* **[RFC 2396]** T. Berners-Lee et al.: *Uniform Resource Identifiers (URI): Generic Syntax*.
   August 1998 <http://tools.ietf.org/html/rfc2396>.
 
 ## Informative References
