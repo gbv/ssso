@@ -79,7 +79,7 @@ ontology:
                                              |      |
                                              v      v
    +-----------------+   provides     +--------------------+   consumedBy   +-----------------+
-   | ServiceProvider |--------------->|     Service        |--------------->| ServiceConsumer |
+   | ServiceProvider |--------------->|    ServiceEvent    |--------------->| ServiceConsumer |
    |                 |<---------------|                    |<---------------|                 |
    +-----------------+   providedBy   |   ReservedService  |   consumes     +-----------------+
                                       |   PreparedService  |
@@ -630,5 +630,5 @@ Offering these ontologies when using SSSO.
 SSSO was motivated by the design of an ontology for the Patrons Account
 Information API (PAIA, <http://purl.org/ontology/paia>). It includes concepts
 formerly included in the specification of Document Availability Information API
-(DAIA).
+(DAIA, <http://github.com/gbv/daiaspec>).
 
