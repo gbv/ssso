@@ -99,15 +99,15 @@ these service status.
 
 The following diagram illustrates the classes and properties definied in this ontology:
 
-```
+``` {.ditaa}
                                    nextService / previousService
                                               ------
                                              |      |
                                              v      v
-   +-----------------+   provided     +--------------------+   consumedBy   +-----------------+
+   +-----------------+   provides     +--------------------+   consumedBy   +-----------------+
    | ServiceProvider |--------------->|     Service        |--------------->| ServiceConsumer |
    |                 |<---------------|                    |<---------------|                 |
-   +-----------------+   providedBy   |   ReservedService  |   consumed     +-----------------+
+   +-----------------+   providedBy   |   ReservedService  |   consumes     +-----------------+
                                       |   PreparedService  |
                                       |   ProvidedService  |
                                       |   ExecutedService  |
@@ -310,14 +310,14 @@ in the future.
 
 # Properties
 
-## provided
+## provides
 
-[provided]: #provided
+[provides]: #provides
 
 Relates a [ServiceProvider] instance to a [ServiceEvent] instance .
 
-    ssso:providedBy a owl:ObjectProperty ;
-        rdfs:label "provided" ;
+    ssso:provides a owl:ObjectProperty ;
+        rdfs:label "provides" ;
         rdfs:domain ssso:ServiceProvider ;
         rdfs:range ssso:ServiceEvent ;
         owl:inverseOf ssso:providedBy ;
@@ -333,17 +333,17 @@ Relates a [ServiceEvent] instance to a [ServiceProvider] instance.
         rdfs:label "providedBy" ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range ssso:ServiceProvider ;
-        owl:inverseOf ssso:provided ;
+        owl:inverseOf ssso:provides ;
         rdfs:isDefinedBy <> .
 
-## consumed
+## consumes
 
-[consumed]: #consumed
+[consumes]: #consumes
 
 Relates a [ServiceConsumer] instance to a [ServiceEvent] instance.
 
-    ssso:consumedBy a owl:ObjectProperty ;
-        rdfs:label "consumed" ;
+    ssso:consumes a owl:ObjectProperty ;
+        rdfs:label "consumes" ;
         rdfs:domain ssso:ServiceConsumer ;
         rdfs:range ssso:ServiceEvent ;
         owl:inverseOf ssso:consumedBy ;
@@ -359,7 +359,7 @@ Relates a [ServiceEvent] instance to a [ServiceConsumer] instance.
         rdfs:label "consumedBy" ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range ssso:ServiceConsumer ;
-        owl:inverseOf ssso:consumed ;
+        owl:inverseOf ssso:consumes ;
         rdfs:isDefinedBy <> .
 
 ## nextService
@@ -398,19 +398,19 @@ is an instance of [TimeTravel] and [ExecutedService]).
 
 The following inference rules apply:
 
-```
+``` {.n3}
 # domains and ranges
-{ $p ssso:provided $s }        => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
-{ $s ssso:providedBy $p }      => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
-{ $c ssso:consumed $s }        => { $c a ssso:ServiceConsumer . $s a ssso:ServiceEvent } .
+{ $p ssso:provides $s }        => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
+{ $s ssso:providedserviceBy $p }      => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
+{ $c ssso:consumes $s }        => { $c a ssso:ServiceConsumer . $s a ssso:ServiceEvent } .
 { $s ssso:consumedBy $c }      => { $c a ssso:ServiceConsumer . $s a ssso:ServiceEvent } .
 { $a ssso:nextService $b }     => { $a a ssso:ServiceEvent . $b a ssso:ServiceEvent } .
 { $a ssso:previousService $b } => { $a a ssso:ServiceEvent . $b a ssso:ServiceEvent } .
 
 # inverse properties
 { $a dcterms:hasPart $b }      <=> { $b dcterms:partOf $a } .
-{ $p ssso:provided $s }        <=> { $s ssso:providedBy $p } .
-{ $c ssso:consumed $s }        <=> { $s ssso:consumedBy $p } .
+{ $p ssso:provides $s }        <=> { $s ssso:providedBy $p } .
+{ $c ssso:consumes $s }        <=> { $s ssso:consumedBy $p } .
 { $a ssso:previousService $b } <=> { $b ssso:nextService $a } .
 
 # subclasses
