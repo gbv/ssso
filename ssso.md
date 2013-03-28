@@ -34,8 +34,8 @@ is <http://purl.org/ontology/ssso>.
 The following namspace prefixes are used to refer to [related ontologies]:
 
     @prefix crm:     <http://purl.org/NET/cidoc-crm/core#> .
-    @prefix dctype:  <http://purl.org/dc/dcmitype/> .
     @prefix dcterms: <http://purl.org/dc/terms/> .
+    @prefix dctype:  <http://purl.org/dc/dcmitype/> .
     @prefix dul:     <http://www.loa-cnr.it/ontologies/DUL.owl#> .
     @prefix event:   <http://purl.org/ontology/c4dm/event.owl#> .
     @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
@@ -48,6 +48,7 @@ The following namspace prefixes are used to refer to [related ontologies]:
     @prefix schema:  <http://schema.org/> .
     @prefix tio:     <http://purl.org/tio/ns#> .
     @prefix vann:    <http://purl.org/vocab/vann/> .
+    @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
 The Simple Service Status Ontology (SSSO) is defined in RDF/Turtle as following:
 
@@ -69,8 +70,35 @@ and consumed by at least one [ServiceConsumer] (e.g. a customer, attendee, or
 patron). Multiple service event that belong to one service fulfillment should
 be connected in time with properties [nextService] and [previousService].
 
-SSSO further defines five typical service status as disjoint subclasses of
-[ServiceEvent]. Actual service fulfillments do not need to implement all of 
+The following diagram illustrates the classes and properties defined in this
+ontology:
+
+``` {.ditaa}
+                                   nextService / previousService
+                                              ------
+                                             |      |
+                                             v      v
+   +-----------------+   provides     +--------------------+   consumedBy   +-----------------+
+   | ServiceProvider |--------------->|     Service        |--------------->| ServiceConsumer |
+   |                 |<---------------|                    |<---------------|                 |
+   +-----------------+   providedBy   |   ReservedService  |   consumes     +-----------------+
+                                      |   PreparedService  |
+                                      |   ProvidedService  |
+        +------------+   limits       |   ExecutedService  |   delay    
+        | Limitation |--------------->|   RejectedService  |-------------> duration-or-time
+        |            |<---------------|                    |-------------> xsd:nonNegativeInteger
+        +------------+  limitedBy     | ServiceFulfillment |   queue
+                                      +-----^--------------+
+                                            |      ^
+                                            |      |
+                                             ------
+                               dcterms:hasPart / dcterms:partOf
+```
+
+## Service status
+
+SSSO defines five typical service status as disjoint subclasses of
+[ServiceEvent]. Actual service fulfillments do not need to implement all of
 these service status.
 
 * A [ReservedService] is in status **reserved**:\
@@ -96,34 +124,37 @@ these service status.
   the service has been refused or stopped. A possible example is a 
   canceled contract.
 
+## Service limitations
 
-The following diagram illustrates the classes and properties definied in this ontology:
+SSSO also defines the class [ServiceLimitation] and the properties [limits],
+[limitedBy], [delay], and [queue] to express limitations of services.
 
-``` {.ditaa}
-                                   nextService / previousService
-                                              ------
-                                             |      |
-                                             v      v
-   +-----------------+   provides     +--------------------+   consumedBy   +-----------------+
-   | ServiceProvider |--------------->|     Service        |--------------->| ServiceConsumer |
-   |                 |<---------------|                    |<---------------|                 |
-   +-----------------+   providedBy   |   ReservedService  |   consumes     +-----------------+
-                                      |   PreparedService  |
-                                      |   ProvidedService  |
-                                      |   ExecutedService  |
-                                      |   RejectedService  |
-                                      |                    |
-                                      | ServiceFulfillment |
-                                      +-----^--------------+
-                                            |      ^
-                                            |      |
-                                             ------
-                               dcterms:hasPart / dcterms:partOf
-```
+## Service types and times
 
 This ontology does not make any assumptions about types of services.  To define
 service types, define a subclass of [ServiceEvent].  The class [TimeTravel] is
 included in SSSO as artifical example of a service type.
+
+SSSO does neither define (yet another) set of properties to relate a service
+event to the time when it started and/or ended. To express such times, one
+should better use existing properties from related ontologies, such as:
+
+* [schema:startDate] and [schema:endDate]
+* [prov:startedAtTime](#) and [prov:endedAtTime](#)
+* [tio:starts](#http://purl.org/tio/ns#starts) and [tio:ends](#http://purl.org/tio/ns#ends)
+* [lode:atTime](#http://linkedevents.org/ontology/#term-atTime) or
+  [lode:circa](#http://linkedevents.org/ontology/#term-circa)
+* [dcterms:date](#http://dublincore.org/documents/dcmi-terms/#terms-date)
+
+The property values SHOULD be modeled as instance of [xsd:dateTime] or
+[xsd:date]. The starting time of a service event (if given) MUST be equal to or
+earlier than the ending time of the same service event (unless the service is
+an instance of [TimeTravel] and [ExecutedService]).
+
+To express an estimated and additional time, SSSO defines the property [delay]
+which can also hold a relative duration. Applications SHOULD NOT use this
+property to relate a service event to its normal time, unless this time is
+an additional constraint.
 
 # Classes
 
@@ -158,23 +189,6 @@ actually sold or just provided for free.
             schema:IndividualProduct ,
             gr:Individual ;
             rdfs:isDefinedBy <> .
-
-SSSO does not define (yet another) set of properties to relate a service event
-to the time when it started and/or ended. One should better use existing
-properties from related ontologies, such as:
-
-* [schema:startDate] and [schema:endDate]
-* [prov:startedAtTime](#) and [prov:endedAtTime](#)
-* [tio:starts](#http://purl.org/tio/ns#starts) and [tio:ends](#http://purl.org/tio/ns#ends)
-* [lode:atTime](#http://linkedevents.org/ontology/#term-atTime) or
-  [lode:circa](#http://linkedevents.org/ontology/#term-circa)
-* [dcterms:date](#http://dublincore.org/documents/dcmi-terms/#terms-date)
-
-The property values SHOULD be modeled as instance of `xsd:dateTime` or
-`xsd:date`. The starting time of a service event (if given) MUST be equal to or
-earlier than the ending time of the same service event (unless the service is
-an instance of [TimeTravel] and [ExecutedService]).
-
 
 ## ServiceFulfillment
 
@@ -297,6 +311,20 @@ the nature of consumers.
         rdfs:label "ServiceConsumer" ;
         rdfs:isDefinedBy <> .
 
+## ServiceLimitation
+
+[ServiceLimitation]: #servicelimitation
+
+A service limitation is some obstacle that may limit the use of a
+[ServiceEvent]. For instance the purchase of guns and drugs is limited to
+consumers with special permission. Another example is providing a different
+product or activity than originally requested. Services and limitations
+are connected to each other with properties [limits] and [limitedBy].
+
+    ssso:ServiceLimitation a owl:Class ;
+        rdfs:label "ServiceLimitation" ;
+        rdfs:isDefinedBy <> .
+
 ## TimeTravel
 
 [TimeTravel]: #timetravel
@@ -362,6 +390,64 @@ Relates a [ServiceEvent] instance to a [ServiceConsumer] instance.
         owl:inverseOf ssso:consumes ;
         rdfs:isDefinedBy <> .
 
+## limits
+
+[limits]: #limits
+
+Relates a [ServiceLimitation] instance to a [ServiceEvent] instance.
+
+    ssso:limits a owl:ObjectProperty ;
+        rdfs:label "limits" ;
+        rdfs:domain ssso:ServiceLimitation ;
+        rdfs:range ssso:ServiceEvent ;
+        owl:inverseOf ssso:limitedBy ;
+        rdfs:isDefinedBy <> .
+
+## limitedBy
+
+[limitedBy]: #limitedBy
+
+Relates a [ServiceEvent] instance to a [ServiceLimitation] instance.
+
+    ssso:limitedBy a owl:ObjectProperty ;
+        rdfs:label "limitedBy" ;
+        rdfs:domain ssso:ServiceEvent ;
+        rdfs:range ssso:ServiceLimitation ;
+        owl:inverseOf ssso:limits ;
+        rdfs:isDefinedBy <> .
+
+## delay
+
+[delay]: #delay
+
+This property can be used to specify an estimated period of time or a date when
+a [ServiceEvent] is expected to take place. Applications SHOULD use values in
+the range of [xsd:duration], [xsd:dateTime], [xsd:date] or the special value
+"unknown" (to indicate a delay of unknown duration). The range may later be
+extended to a subset of Extended Date/Time Format (EDTF).
+
+    ssso:queue a owl:DatatypeProperty ;
+        rdfs:label "delay" ;
+        rdfs:domain ssso:ServiceEvent ;
+        rdfs:isDefinedBy <> .
+
+[xsd:dateTime]: http://www.w3.org/TR/xmlschema-2/#dateTime
+[xsd:date]: http://www.w3.org/TR/xmlschema-2/#date
+[xsd:duration]: http://www.w3.org/TR/xmlschema-2/#duration
+
+## queue
+
+[queue]: #queue
+
+This property can be used to indicate the size of a waiting queue for some
+[ServiceEvent]. Its value must be a non-negative integer (0,1,2...).
+
+    ssso:queue a owl:DatatypeProperty ;
+        rdfs:label "queue" ;
+        rdfs:domain ssso:ServiceEvent ;
+        rdfs:range xsd:nonNegativeInteger ;
+        rdfs:isDefinedBy <> .
+
 ## nextService
 
 [nextService]: #nextservice
@@ -401,7 +487,10 @@ The following inference rules apply:
 ``` {.n3}
 # domains and ranges
 { $p ssso:provides $s }        => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
-{ $s ssso:providedserviceBy $p }      => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
+{ $s ssso:providedBy $p }      => { $p a ssso:ServiceProvider . $s a ssso:ServiceEvent } .
+{ $l ssso:limits $s }          => { $l a ssso:ServiceLimitation . $s a ssso:ServiceEvent } .
+{ $s ssso:limitedBy $l }       => { $l a ssso:ServiceLimitation . $s a ssso:ServiceEvent } .
+
 { $c ssso:consumes $s }        => { $c a ssso:ServiceConsumer . $s a ssso:ServiceEvent } .
 { $s ssso:consumedBy $c }      => { $c a ssso:ServiceConsumer . $s a ssso:ServiceEvent } .
 { $a ssso:nextService $b }     => { $a a ssso:ServiceEvent . $b a ssso:ServiceEvent } .
@@ -411,6 +500,7 @@ The following inference rules apply:
 { $a dcterms:hasPart $b }      <=> { $b dcterms:partOf $a } .
 { $p ssso:provides $s }        <=> { $s ssso:providedBy $p } .
 { $c ssso:consumes $s }        <=> { $s ssso:consumedBy $p } .
+{ $l ssso:limits $s }          <=> { $s ssso:limitedBy $l } .
 { $a ssso:previousService $b } <=> { $b ssso:nextService $a } .
 
 # subclasses
@@ -496,6 +586,8 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 [schema:startDate]: http://schema.org/Event
 [schema:endDate]: http://schema.org/Event
 
+[tio:ActualTicket]: http://purl.org/tio/ns#ActualTicket
+
 [GoodRelations]: http://www.heppnetz.de/projects/goodrelations/
 
 # References
@@ -512,7 +604,7 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 
 SSSO is loosely connected to the following ontologies: it is compatible with
 them but their use is optional. Feel free to rely on or ignore additional parts
-of these ontologies when using SSSO.
+Offering these ontologies when using SSSO.
 
 * *Dublin Core Metadata Terms*. 
   <http://dublincore.org/documents/dcmi-terms/> .
@@ -536,5 +628,7 @@ of these ontologies when using SSSO.
   <http://purl.org/tio>.
 
 SSSO was motivated by the design of an ontology for the Patrons Account
-Information API (PAIA): <http://purl.org/ontology/paia>
+Information API (PAIA, <http://purl.org/ontology/paia>). It includes concepts
+formerly included in the specification of Document Availability Information API
+(DAIA).
 
