@@ -1,8 +1,8 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix ssso: <http://purl.org/ontology/ssso#> .
 @prefix crm: <http://purl.org/NET/cidoc-crm/core#> .
-@prefix dctype: <http://purl.org/dc/dcmitype/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
 @prefix dul: <http://www.loa-cnr.it/ontologies/DUL.owl#> .
 @prefix event: <http://purl.org/ontology/c4dm/event.owl#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -15,6 +15,7 @@
 @prefix schema: <http://schema.org/> .
 @prefix tio: <http://purl.org/tio/ns#> .
 @prefix vann: <http://purl.org/vocab/vann/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <http://purl.org/ontology/ssso>
     vann:preferredNamespacePrefix "ssso" ;
@@ -66,6 +67,11 @@ ssso:ServiceFulfillment
     rdfs:label "ServiceFulfillment" ;
     rdfs:subClassOf ssso:ServiceEvent .
 
+ssso:ServiceLimitation
+    a owl:Class ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "ServiceLimitation" .
+
 ssso:ServiceProvider
     a owl:Class ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
@@ -91,6 +97,22 @@ ssso:consumes
     rdfs:label "consumes" ;
     rdfs:range ssso:ServiceEvent ;
     owl:inverseOf ssso:consumedBy .
+
+ssso:limitedBy
+    a owl:ObjectProperty ;
+    rdfs:domain ssso:ServiceEvent ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "limitedBy" ;
+    rdfs:range ssso:ServiceLimitation ;
+    owl:inverseOf ssso:limits .
+
+ssso:limits
+    a owl:ObjectProperty ;
+    rdfs:domain ssso:ServiceLimitation ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "limits" ;
+    rdfs:range ssso:ServiceEvent ;
+    owl:inverseOf ssso:limitedBy .
 
 ssso:nextService
     a owl:ObjectProperty ;
@@ -123,4 +145,11 @@ ssso:provides
     rdfs:label "provides" ;
     rdfs:range ssso:ServiceEvent ;
     owl:inverseOf ssso:providedBy .
+
+ssso:queue
+    a owl:DatatypeProperty ;
+    rdfs:domain ssso:ServiceEvent ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "delay", "queue" ;
+    rdfs:range xsd:nonNegativeInteger .
 
