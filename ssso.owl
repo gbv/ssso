@@ -213,22 +213,22 @@
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#TimeTravel">
     <rdfs:isDefinedBy rdf:resource="http://purl.org/ontology/ssso"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#provides">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
-    <rdfs:label>provided</rdfs:label>
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#provides">
+    <rdfs:label>provides</rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#provides">
     <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceProvider"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#provides">
     <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#provides">
     <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#providedBy"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#provides">
     <rdfs:isDefinedBy rdf:resource="http://purl.org/ontology/ssso"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
@@ -244,27 +244,27 @@
     <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceProvider"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
-    <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#provided"/>
+    <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#provides"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#providedBy">
     <rdfs:isDefinedBy rdf:resource="http://purl.org/ontology/ssso"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumes">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
-    <rdfs:label>consumed</rdfs:label>
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumes">
+    <rdfs:label>consumes</rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumes">
     <rdfs:domain rdf:resource="http://purl.org/ontology/ssso#ServiceConsumer"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumes">
     <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceEvent"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumes">
     <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#consumedBy"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
+  <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumes">
     <rdfs:isDefinedBy rdf:resource="http://purl.org/ontology/ssso"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
@@ -280,7 +280,7 @@
     <rdfs:range rdf:resource="http://purl.org/ontology/ssso#ServiceConsumer"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
-    <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#consumed"/>
+    <owl:inverseOf rdf:resource="http://purl.org/ontology/ssso#consumes"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.org/ontology/ssso#consumedBy">
     <rdfs:isDefinedBy rdf:resource="http://purl.org/ontology/ssso"/>

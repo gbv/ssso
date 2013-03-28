@@ -78,11 +78,19 @@ ssso:TimeTravel
 
 ssso:consumedBy
     a owl:ObjectProperty ;
-    rdfs:domain ssso:ServiceConsumer, ssso:ServiceEvent ;
+    rdfs:domain ssso:ServiceEvent ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
-    rdfs:label "consumed", "consumedBy" ;
-    rdfs:range ssso:ServiceConsumer, ssso:ServiceEvent ;
-    owl:inverseOf ssso:consumed, ssso:consumedBy .
+    rdfs:label "consumedBy" ;
+    rdfs:range ssso:ServiceConsumer ;
+    owl:inverseOf ssso:consumes .
+
+ssso:consumes
+    a owl:ObjectProperty ;
+    rdfs:domain ssso:ServiceConsumer ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "consumes" ;
+    rdfs:range ssso:ServiceEvent ;
+    owl:inverseOf ssso:consumedBy .
 
 ssso:nextService
     a owl:ObjectProperty ;
@@ -102,9 +110,17 @@ ssso:previousService
 
 ssso:providedBy
     a owl:ObjectProperty ;
-    rdfs:domain ssso:ServiceEvent, ssso:ServiceProvider ;
+    rdfs:domain ssso:ServiceEvent ;
     rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
-    rdfs:label "provided", "providedBy" ;
-    rdfs:range ssso:ServiceEvent, ssso:ServiceProvider ;
-    owl:inverseOf ssso:provided, ssso:providedBy .
+    rdfs:label "providedBy" ;
+    rdfs:range ssso:ServiceProvider ;
+    owl:inverseOf ssso:provides .
+
+ssso:provides
+    a owl:ObjectProperty ;
+    rdfs:domain ssso:ServiceProvider ;
+    rdfs:isDefinedBy <http://purl.org/ontology/ssso> ;
+    rdfs:label "provides" ;
+    rdfs:range ssso:ServiceEvent ;
+    owl:inverseOf ssso:providedBy .
 
