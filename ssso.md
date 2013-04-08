@@ -9,12 +9,27 @@ for typical status in fulfillment of a service.
 
 ## Status of this document
 
-This HTML document and RDF serializations of the Simple Service Status Ontology
-([**`ssso.ttl`**](ssso.ttl) in RDF/Turtle and [**`ssss.owl`**](ssso.owl) in
-RDF/XML) are generated automatically from a source file written in Pandoc
-Markdown syntax. Sources and updates are available at
-<http://github.com/gbv/ssso>. The current version of this document was last
-modified at GIT_REVISION_DATE with revision GIT_REVISION_HASH.
+This specification is managed in a public git repository at
+<http://github.com/gbv/ssso>. The master file
+[ssso.md](https://github.com/gbv/ssso/blob/master/ssso.md) is written in
+[Pandoc’s
+Markdown](http://johnmacfarlane.net/pandoc/demo/example9/pandocs-markdown.html).
+The current version hash is GIT_REVISION_HASH.
+
+RDF serializations of the Simple Service Status Ontology exist as 
+[**`ssso.ttl`**](ssso.ttl) in RDF/Turtle as [**`ssss.owl`**](ssso.owl), both
+generated from Markdown via [makespec](https://github.com/jakobib/makespec).
+
+**How to contribute**
+
+* Express data in RDF with SSSO!
+* Map other ontologies to SSSO!
+* [Comment](https://github.com/gbv/ssso/issues) on the specification!
+* [Correct](https://github.com/gbv/ssso/blob/master/ssso.md) the current SSSO draft!
+
+**Revision history**
+
+GIT_CHANGES
 
 ## Terminology
 
