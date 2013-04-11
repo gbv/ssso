@@ -1,11 +1,9 @@
-% Simple Service Status Ontology (SSSO)
-% Jakob Voß
-% GIT_REVISION_DATE
-
 # Introduction
 
 The **Simple Service Status Ontology (SSSO)** is an event-based RDF ontology
-for typical status in fulfillment of a service.
+for typical status in fulfillment of a service. The specification of SSSO was
+motivated by the design of an ontology of [Patrons Account Information API]
+(PAIA) and a redesign of an ontology of [Document Availability API] (DAIA).
 
 ## Status of this document
 
@@ -144,15 +142,19 @@ these service status.
 SSSO also defines the class [ServiceLimitation] and the properties [limits],
 [limitedBy], [delay], and [queue] to express limitations of services.
 
-## Service types and times
+## Service types
 
-This ontology does not make any assumptions about types of services.  To define
-service types, define a subclass of [ServiceEvent].  The class [TimeTravel] is
-included in SSSO as artifical example of a service type.
+SSSO does not make any assumptions about types of services.  To define service
+types, define a subclass of [ServiceEvent].  The class [TimeTravel] is included
+in SSSO as toy example of an artificial service type. See the [Document Service
+Ontology](http://gbv.github.com/dso) (DSO) for more practical examples of
+service types based on SSSO.
 
-SSSO does neither define (yet another) set of properties to relate a service
-event to the time when it started and/or ended. To express such times, one
-should better use existing properties from related ontologies, such as:
+## Service times
+
+SSSO does not define (yet another) set of properties to relate a service event
+to the time when it started and/or ended. To express such times, one should
+better use existing properties from related ontologies, such as:
 
 * [schema:startDate] and [schema:endDate]
 * [prov:startedAtTime](#) and [prov:endedAtTime](#)
@@ -161,10 +163,10 @@ should better use existing properties from related ontologies, such as:
   [lode:circa](#http://linkedevents.org/ontology/#term-circa)
 * [dcterms:date](#http://dublincore.org/documents/dcmi-terms/#terms-date)
 
-The property values SHOULD be modeled as instance of [xsd:dateTime] or
-[xsd:date]. The starting time of a service event (if given) MUST be equal to or
-earlier than the ending time of the same service event (unless the service is
-an instance of [TimeTravel] and [ExecutedService]).
+Property values of service times SHOULD be modeled as instance of
+[xsd:dateTime] or [xsd:date]. The starting time of a service event (if given)
+MUST be equal to or earlier than the ending time of the same service event
+(unless the service is an instance of [TimeTravel] and [ExecutedService]).
 
 To express an estimated and additional time, SSSO defines the property [delay]
 which can also hold a relative duration. Applications SHOULD NOT use this
@@ -177,8 +179,8 @@ an additional constraint.
 
 [ServiceEvent]: #ServiceEvent
 
-A service event is an activity that takes places during a specific time. The
-event can be connected to one or more [ServiceProvider] with property
+A **service event** is an activity that takes places during a specific time.
+The event can be connected to one or more [ServiceProvider] with property
 [providedBy] and to one or more [ServiceConsumer] with property [consumedBy].
 
 Several [related ontologies] have been proposed to model events or activities
@@ -209,12 +211,12 @@ actually sold or just provided for free.
 
 [ServiceFulfillment]: #servicefulfillment
 
-A Service fulfillment is a [ServiceEvent] that consists of one or more parts. Each
-of these parts is also a [ServiceEvent] and connected to the service fulfillment by
-`dcterms:partOf`. Vice versa, each instance of [ServiceEvent] is also instance of
-[ServiceFulfillment] if connected to another [ServiceEvent] by [dcterms:hasPart].
-The parts of a service fulfillment SHOULD be connected to each other by
-[nextService] and [previousService].
+A **service fulfillment** is a [ServiceEvent] that consists of one or more
+parts. Each of these parts is also a [ServiceEvent] and connected to the
+service fulfillment by `dcterms:partOf`. Vice versa, each instance of
+[ServiceEvent] is also instance of [ServiceFulfillment] if connected to another
+[ServiceEvent] by [dcterms:hasPart].  The parts of a service fulfillment SHOULD
+be connected to each other by [nextService] and [previousService].
 
     ssso:ServiceFulfillment a owl:Class ;
         rdfs:label "ServiceFulfillment" ;
@@ -225,9 +227,9 @@ The parts of a service fulfillment SHOULD be connected to each other by
 
 [ReservedService]: #reservedService
 
-A reserved service is a [ServiceEvent] that has been accepted by a service provider
-for execution but not prepared yet. The reserved service has neither been
-prepared by a service provider but only queued for further processing.  A
+A **reserved service** is a [ServiceEvent] that has been accepted by a service
+provider for execution but not prepared yet. The reserved service has neither
+been prepared by a service provider but only queued for further processing.  A
 typical example is a product order that has been placed but not payed yet or a
 payed ticket to a theater performance.
 
@@ -243,8 +245,8 @@ payed ticket to a theater performance.
 
 [PreparedService]: #preparedservice
 
-A prepared service is being prepared to be provided or executed. A typical example 
-is a product that is being send to its consumer.
+A **prepared service** is being prepared to be provided or executed. A typical
+example is a product that is being send to its consumer.
 
     ssso:PreparedService a owl:Class ;
         rdfs:label "ReservedService" ;
@@ -258,8 +260,8 @@ is a product that is being send to its consumer.
 
 [ProvidedService]: #providedservice
 
-A provided service is being made available for immediate execution. A typical example is a
-product that is ready for being picked up by its consumer.
+A **provided service** is being made available for immediate execution. A
+typical example is a product that is ready for being picked up by its consumer.
 
     ssso:ReservedService a owl:Class ;
         rdfs:label "ReservedService" ;
@@ -273,8 +275,8 @@ product that is ready for being picked up by its consumer.
 
 [ExecutedService]: #executedservice
 
-An executed service represents the actual execution event of fulfillment of a
-service. A typical example is a theater performance that is being played.
+An **executed service** represents the actual execution event of fulfillment of
+a service. A typical example is a theater performance that is being played.
 
     ssso:ExecutedService a owl:Class ;
         rdfs:label "ExecutedService" ;
@@ -288,9 +290,9 @@ service. A typical example is a theater performance that is being played.
 
 [RejectedService]: #rejectedservice
 
-A rejected service is a [ServiceEvent] that has been rejected by its provider or by
-its consumer. The rejection may be infinite or it may be followed by another
-service when the reason for rejection has been removed.
+A **rejected service** is a [ServiceEvent] that has been rejected by its
+provider or by its consumer. The rejection may be infinite or it may be
+followed by another service when the reason for rejection has been removed.
 
     ssso:RejectedService a owl:Class ;
         rdfs:label "RejectedService" ;
@@ -304,10 +306,10 @@ service when the reason for rejection has been removed.
 
 [ServiceProvider]: #serviceprovider
 
-A service provider is an entity that is responsible for providing a [ServiceEvent].
-Typical providers, such as organizations and people, are also instances of
-[foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any constraints on
-the nature of providers.
+A **service provider** is an entity that is responsible for providing a
+[ServiceEvent].  Typical providers, such as organizations and people, are also
+instances of [foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any
+constraints on the nature of providers.
 
     ssso:ServiceProvider a owl:Class ;
         rdfs:label "ServiceProvider" ;
@@ -317,10 +319,10 @@ the nature of providers.
 
 [ServiceConsumer]: #serviceconsumer
 
-A service consumer is an entity that is requesting or consuming a [ServiceEvent].
-Typical consumers, such as organizations and people, are instances of
-[foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any constraints on
-the nature of consumers.
+A **service consumer** is an entity that is requesting or consuming a
+[ServiceEvent].  Typical consumers, such as organizations and people, are
+instances of [foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any
+constraints on the nature of consumers.
 
     ssso:ServiceConsumer a owl:Class ;
         rdfs:label "ServiceConsumer" ;
@@ -330,11 +332,11 @@ the nature of consumers.
 
 [ServiceLimitation]: #servicelimitation
 
-A service limitation is some obstacle that may limit the use of a
+A **service limitation** is some obstacle that may limit the use of a
 [ServiceEvent]. For instance the purchase of guns and drugs is limited to
 consumers with special permission. Another example is providing a different
-product or activity than originally requested. Services and limitations
-are connected to each other with properties [limits] and [limitedBy].
+product or activity than originally requested. Services and limitations are
+connected to each other with properties [limits] and [limitedBy].
 
     ssso:ServiceLimitation a owl:Class ;
         rdfs:label "ServiceLimitation" ;
@@ -344,8 +346,8 @@ are connected to each other with properties [limits] and [limitedBy].
 
 [TimeTravel]: #timetravel
 
-An event which ends before it has been started. Details have been implemented
-in the future.
+A **time travel** is an event which ends before it has been started. Details
+have been implemented in the future.
 
     ssso:TimeTravel a owl:Class ;
         rdfs:label "TimeTravel" ;
@@ -357,7 +359,8 @@ in the future.
 
 [provides]: #provides
 
-Relates a [ServiceProvider] instance to a [ServiceEvent] instance .
+Relates a [ServiceProvider] instance that **provides** a [ServiceEvent]
+instance to this service event.
 
     ssso:provides a owl:ObjectProperty ;
         rdfs:label "provides" ;
@@ -370,7 +373,8 @@ Relates a [ServiceProvider] instance to a [ServiceEvent] instance .
 
 [providedBy]: #providedBy
 
-Relates a [ServiceEvent] instance to a [ServiceProvider] instance.
+Relates a [ServiceEvent] instance that is **provided by** a [ServiceProvider]
+instance to this service provider.
 
     ssso:providedBy a owl:ObjectProperty ;
         rdfs:label "providedBy" ;
@@ -383,7 +387,8 @@ Relates a [ServiceEvent] instance to a [ServiceProvider] instance.
 
 [consumes]: #consumes
 
-Relates a [ServiceConsumer] instance to a [ServiceEvent] instance.
+Relates a [ServiceConsumer] instance that **consumes** a [ServiceEvent]
+instance to this service event.
 
     ssso:consumes a owl:ObjectProperty ;
         rdfs:label "consumes" ;
@@ -396,7 +401,8 @@ Relates a [ServiceConsumer] instance to a [ServiceEvent] instance.
 
 [consumedBy]: #consumedBy
 
-Relates a [ServiceEvent] instance to a [ServiceConsumer] instance.
+Relates a [ServiceEvent] instance that is **consumed by** a [ServiceConsumer]
+instance to this service consumer.
 
     ssso:consumedBy a owl:ObjectProperty ;
         rdfs:label "consumedBy" ;
@@ -409,7 +415,8 @@ Relates a [ServiceEvent] instance to a [ServiceConsumer] instance.
 
 [limits]: #limits
 
-Relates a [ServiceLimitation] instance to a [ServiceEvent] instance.
+Relates a [ServiceLimitation] instance that **limits** a [ServiceEvent]
+instance to this service event.
 
     ssso:limits a owl:ObjectProperty ;
         rdfs:label "limits" ;
@@ -422,7 +429,8 @@ Relates a [ServiceLimitation] instance to a [ServiceEvent] instance.
 
 [limitedBy]: #limitedBy
 
-Relates a [ServiceEvent] instance to a [ServiceLimitation] instance.
+Relates a [ServiceEvent] instance that is **limited by** a [ServiceLimitation]
+instance to this service limitation.
 
     ssso:limitedBy a owl:ObjectProperty ;
         rdfs:label "limitedBy" ;
@@ -435,11 +443,12 @@ Relates a [ServiceEvent] instance to a [ServiceLimitation] instance.
 
 [delay]: #delay
 
-This property can be used to specify an estimated period of time or a date when
-a [ServiceEvent] is expected to take place. Applications SHOULD use values in
-the range of [xsd:duration], [xsd:dateTime], [xsd:date] or the special value
-"unknown" (to indicate a delay of unknown duration). The range may later be
-extended to a subset of Extended Date/Time Format (EDTF).
+This property can be used to specify an **estimated period of time or a date**
+when a delayed [ServiceEvent] is expected to take place. Applications SHOULD
+use values in the range of [xsd:duration], [xsd:dateTime], [xsd:date], or the
+special value "unknown" to indicate a significant delay of unknown duration.
+The range may later be extended to a subset of Extended [Date/Time
+Format](http://www.loc.gov/standards/datetime/) (EDTF).
 
     ssso:queue a owl:DatatypeProperty ;
         rdfs:label "delay" ;
@@ -450,12 +459,16 @@ extended to a subset of Extended Date/Time Format (EDTF).
 [xsd:date]: http://www.w3.org/TR/xmlschema-2/#date
 [xsd:duration]: http://www.w3.org/TR/xmlschema-2/#duration
 
+Applications SHOULD NOT use this property to specify a normal [Service
+time](#service-time). An example of a service event with delay is a concert
+that starts at an official time but there is a delay until band begins to play.
+
 ## queue
 
 [queue]: #queue
 
-This property can be used to indicate the size of a waiting queue for some
-[ServiceEvent]. Its value must be a non-negative integer (0,1,2...).
+This property can be used to indicate the **size of a waiting queue** for some
+[ServiceEvent]. Its value MUST be a non-negative integer (0,1,2...).
 
     ssso:queue a owl:DatatypeProperty ;
         rdfs:label "queue" ;
@@ -467,10 +480,11 @@ This property can be used to indicate the size of a waiting queue for some
 
 [nextService]: #nextservice
 
-Relates a service instances to another service instance which is following in
-time.  The starting time of the following service instance MUST be equal or
-later then the ending time of the previous service (unless one of the services
-is an instance of [TimeTravel] and [ExecutedService]).
+Relates a [ServiceEvent] instances to another service event that is the **next
+service** following in time.  The starting time of the following service
+instance MUST be equal or later then the ending time of the previous service
+(unless one of the services is an instance of [TimeTravel] and
+[ExecutedService]).
 
     ssso:nextService a owl:ObjectProperty ;
         rdfs:label "nextService" ;
@@ -483,10 +497,11 @@ is an instance of [TimeTravel] and [ExecutedService]).
 
 [previousService]: #previousservice
 
-Relates a service instances to another service instance which is preceding in
-time.  The ending time of the previousg service instance MUST be equal or
-earlier then the starting time of the next service  (unless one of the services
-is an instance of [TimeTravel] and [ExecutedService]).
+Relates a [ServiceEvent] instances to another service event that is the
+**previous service** preceding in time.  The ending time of the previousg
+service instance MUST be equal or earlier then the starting time of the next
+service  (unless one of the services is an instance of [TimeTravel] and
+[ExecutedService]).
 
     ssso:previousService a owl:ObjectProperty ;
         rdfs:label "previousService" ;
@@ -617,6 +632,13 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 
 ## Informative References
 
+SSSO was motivated by the design of the following ontologies and specifications
+
+* **[PAIA]** J. Voß: *Patrons Account Information API*.
+  2013 <http://purl.org/ontology/paia>
+* **[DAIA]** J. Voß: *Document Availability Information API*. 
+  2013 <http://github.com/gbv/daiaspec>.
+
 SSSO is loosely connected to the following ontologies: it is compatible with
 them but their use is optional. Feel free to rely on or ignore additional parts
 Offering these ontologies when using SSSO.
@@ -642,8 +664,6 @@ Offering these ontologies when using SSSO.
 * *Tickets Ontology*
   <http://purl.org/tio>.
 
-SSSO was motivated by the design of an ontology for the Patrons Account
-Information API (PAIA, <http://purl.org/ontology/paia>). It includes concepts
-formerly included in the specification of Document Availability Information API
-(DAIA, <http://github.com/gbv/daiaspec>).
+[Patrons Account Information API]: http://purl.org/ontology/paia
+[Document Availability API]: http://purl.org/ontology/daia
 
