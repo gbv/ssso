@@ -12,7 +12,7 @@ This specification is managed in a public git repository at
 [ssso.md](https://github.com/gbv/ssso/blob/master/ssso.md) is written in
 [Pandoc’s
 Markdown](http://johnmacfarlane.net/pandoc/demo/example9/pandocs-markdown.html).
-The current version hash is GIT_REVISION_HASH.
+The current version hash is {GIT_REVISION_HASH}.
 
 RDF serializations of the Simple Service Status Ontology exist as 
 [**`ssso.ttl`**](ssso.ttl) in RDF/Turtle as [**`ssss.owl`**](ssso.owl), both
@@ -27,7 +27,7 @@ generated from Markdown via [makespec](https://github.com/jakobib/makespec).
 
 **Revision history**
 
-GIT_CHANGES
+{GIT_CHANGES}
 
 ## Terminology
 
@@ -35,16 +35,48 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in RFC 2119.
 
-## Namespaces and ontology
+## Namespace and prefix
 
-The URI namespace of this ontology is <http://purl.org/ontology/ssso#>. The
-namespace prefix `ssso` is recommeded. The URI of this ontology as a whole
-is <http://purl.org/ontology/ssso>.
+The URI namespace of Simple Service Status Ontology (SSSO) is 
+<http://purl.org/ontology/ssso#>. The namespace prefix `ssso` SHOULD be used.
+The URI of this ontology as a whole is <http://purl.org/ontology/ssso>.
+
+The ontology is defined in RDF/Turtle as following:
 
     @prefix ssso: <http://purl.org/ontology/ssso#> .
     @base         <http://purl.org/ontology/ssso> .
 
-The following namspace prefixes are used to refer to [related ontologies]:
+    @prefix owl:  <http://www.w3.org/2002/07/owl#> .
+    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix vann: <http://purl.org/vocab/vann/> .
+    @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+    <> a owl:Ontology ;
+        rdfs:label "Simple Service Status Ontology" ;
+        rdfs:label "SSSO" ;
+        vann:preferredNamespacePrefix "ssso" .
+
+## Related ontologies
+
+[related ontologies]: #related-ontologies
+
+Several existing ontologies include classes to model events or activities. 
+Interconnections between these related ontologies, however, are rare. The
+large number of similar classes may result from an inability of ontology 
+engineers to agree on semantics or from the dislike to refer to ontologies that
+have been designed by someone else. The related ontologies are:
+
+* [Dublin Core Metadata Terms]
+* [Schema.org Ontology]
+* [Event Ontology]
+* [Provenance Ontology]
+* [CIDOC-CRM] (CIDOC Conceptual Reference Model)
+* [Linking Open Descriptions of Events] (LODE)
+* [DOLCE+DnS Ultralite ontology] (DUL)
+* [NEPOMUK Calendar Ontology]
+* [Tickets Ontology]
+
+The following namespace prefixes are used to refer to related ontologies:
 
     @prefix crm:     <http://purl.org/NET/cidoc-crm/core#> .
     @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -52,23 +84,14 @@ The following namspace prefixes are used to refer to [related ontologies]:
     @prefix dul:     <http://www.loa-cnr.it/ontologies/DUL.owl#> .
     @prefix event:   <http://purl.org/ontology/c4dm/event.owl#> .
     @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+    @prefix geo:     <http://www.w3.org/2003/01/geo/wgs84_pos#> .
     @prefix gr:      <http://purl.org/goodrelations/v1#> .
     @prefix lode:    <http://linkedevents.org/ontology/> .
     @prefix ncal:    <http://www.semanticdesktop.org/ontologies/2007/04/02/ncal#> .
-    @prefix owl:     <http://www.w3.org/2002/07/owl#> .
     @prefix prov:    <http://www.w3.org/ns/prov#> .
-    @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
     @prefix schema:  <http://schema.org/> .
     @prefix tio:     <http://purl.org/tio/ns#> .
-    @prefix vann:    <http://purl.org/vocab/vann/> .
-    @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-The Simple Service Status Ontology (SSSO) is defined in RDF/Turtle as following:
-
-    <> a owl:Ontology ;
-        rdfs:label "Simple Service Status Ontology" ;
-        rdfs:label "SSSO" ;
-        vann:preferredNamespacePrefix "ssso" .
 
 # Overview
 
@@ -78,9 +101,9 @@ include the purchase of a product in a shop, the attendance at a performance,
 and the lending of a book in a library. In contrast to [related ontologies],
 each [ServiceEvent] and each [ServiceFulfillment] is a not a general offer but
 a particular activity in time. The activity typically takes place provided by
-at least one particular [ServiceProvider] (e.g. a shop, presenter, or library)
-and consumed by at least one [ServiceConsumer] (e.g. a customer, attendee, or
-patron). Multiple service event that belong to one service fulfillment should
+one or more particular [ServiceProvider] (e.g. a shop, presenter, or library)
+and consumed by one or more [ServiceConsumer] (e.g. a customer, attendee, or
+patron). Multiple service event that belong to one service fulfillment SHOULD
 be connected in time with properties [nextService] and [previousService].
 
 The following diagram illustrates the classes and properties defined in this
@@ -107,6 +130,7 @@ ontology:
                                              ------
                                dcterms:hasPart / dcterms:partOf
 ```
+
 
 ## Service status
 
@@ -153,15 +177,18 @@ service types based on SSSO.
 ## Service times
 
 SSSO does not define (yet another) set of properties to relate a service event
-to the time when it started and/or ended. To express such times, one should
-better use existing properties from related ontologies, such as:
+to the time when it started and/or ended. The following properties from
+[related ontologies] are RECOMMENDED instead:
 
-* [schema:startDate] and [schema:endDate]
-* [prov:startedAtTime](#) and [prov:endedAtTime](#)
-* [tio:starts](#http://purl.org/tio/ns#starts) and [tio:ends](#http://purl.org/tio/ns#ends)
-* [lode:atTime](#http://linkedevents.org/ontology/#term-atTime) or
-  [lode:circa](#http://linkedevents.org/ontology/#term-circa)
-* [dcterms:date](#http://dublincore.org/documents/dcmi-terms/#terms-date)
+* ... from [CIDOC-CRM]
+* [schema:startDate] and [schema:endDate] from [Schema.org Ontology]
+* [prov:startedAtTime] and [prov:endedAtTime] from [Provenance Ontology]
+* [tio:starts] and [tio:ends] from [Tickets Ontology]
+* [lode:atTime] and [lode:circa] from from [Linking Open Descriptions of Events]
+* [dcterms:date]
+* ... from [DOLCE+DnS Ultralite Ontology]
+* ... from [Event Ontology]
+* ... from [NEPOMUK Calendar Ontology]
 
 Property values of service times SHOULD be modeled as instance of
 [xsd:dateTime] or [xsd:date]. The starting time of a service event (if given)
@@ -173,20 +200,90 @@ which can also hold a relative duration. Applications SHOULD NOT use this
 property to relate a service event to its normal time, unless this time is
 an additional constraint.
 
+## Service locations
+
+The following properties from [related ontologies] are RECOMMENDED to relate
+a [ServiceEvent] to the location where the service is, will be, or has been
+provided. SSSO does not include any constraints on the nature of locations ---
+see the specific property for suitable ranges:
+
+ property                           ontology                               range
+---------------------------------- -------------------------------------- --------------------------------------------------------
+ [schema:location]                  [Schema.org Ontology]                  [schema:Place] or [schema:PostalAddress]
+ [event:place]                      [Event Ontology]                       [geo:SpatialThing]
+ [crm:P7_took_place_at]             [CIDOC-CRM]                            [crm:E53_Place]
+ [crm:P8_took_place_on_or_within]   [CIDOC-CRM]                            [crm:E19_Physical_Object]
+ [prov:atLocation]                  [Provenance Ontology]                  [prov:Location]
+ [tio:takesPlaceAt]                 [Tickets Ontology]                     [tio:POI] (subclass of [gr:Location] = [schema:Place])
+ [ncal:geo]                         [NEPOMUK Calendar Ontology]            [geo:Point]
+ [ncal:location]                    [NEPOMUK Calendar Ontology]            xsd:string
+ [ncal:locationAltRep]              [NEPOMUK Calendar Ontology]            rdfs:Resource
+ [lode:atPlace]                     [Linking Open Descriptions of Events]  [dul:Place]
+ [dul:hasLocation]                  [DOLCE+DnS Ultralite Ontology]         [dul:Entity]
+
+Service locations are OPTIONAL and a service event MAY have multiple locations.
+
+[crm:E53_Place]: http://purl.org/NET/cidoc-crm/core#E53_Place
+[crm:E19_Physical_Object]: http://purl.org/NET/cidoc-crm/core#E19_Physical_Object
+[crm:P7_took_place_at]: http://purl.org/NET/cidoc-crm/core#P7_took_place_at
+[crm:P8_took_place_on_or_within]: http://purl.org/NET/cidoc-crm/core#P7_took_place_on_or_within
+[dul:hasLocation]: http://www.loa-cnr.it/ontologies/DUL.owl#hasLocation
+[event:place]: http://motools.sourceforge.net/event/event.html#term_place
+[lode:atPlace]: http://linkedevents.org/ontology/atPlace
+[ncal:geo]: http://www.semanticdesktop.org/ontologies/ncal/#geo
+[ncal:locationAltRep]: http://www.semanticdesktop.org/ontologies/ncal/#locationAltRep
+[ncal:location]:  http://www.semanticdesktop.org/ontologies/ncal/#location
+[prov:atLocation]: http://www.w3.org/TR/prov-o/#atLocation
+[schema:location]: http://schema.org/location
+[tio:takesPlaceAt]: http://purl.org/tio/ns#takesPlaceAt
+
+[geo:SpatialThing]: http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing
+[geo:Point]: http://www.w3.org/2003/01/geo/wgs84_pos#Point
+[dul:Place]: http://www.loa-cnr.it/ontologies/DUL.owl#Place
+[dul:Entity]: http://www.loa-cnr.it/ontologies/DUL.owl#Entity
+[prov:Location]: http://www.w3.org/TR/prov-o/#Location
+[tio:POI]: http://purl.org/tio/ns#POI
+[gr:Location]: http://purl.org/goodrelations/v1#Location
+[schema:Place]: http://schema.org/Place
+[schema:PostalAddress]: http://schema.org/PostalAddress
+
+
 # Classes
 
 ## ServiceEvent
 
 [ServiceEvent]: #ServiceEvent
 
-A **service event** is an activity that takes places during a specific time.
-The event can be connected to one or more [ServiceProvider] with property
-[providedBy] and to one or more [ServiceConsumer] with property [consumedBy].
+A **service event** is both, an activity that takes places during a specific
+time, and a kind of product or service. Several [related ontologies] define 
+more general event or activity classes:
 
-Several [related ontologies] have been proposed to model events or activities
-with suprisingly low interconnections. SSSO is agnostic to these ontologies, so
-[ServiceEvent] is related to classes in all of them to make happy multiple
-communities. A [ServiceEvent] is further subclass of [schema:IndividualProduct] 
+* [dctype:Event] in [Dublin Core Metadata Terms]
+* [schema:Event] in [Schema.org Ontology]
+* [event:Event] in [Event Ontology]
+* [prov:Activity] in [Provenance Ontology]
+* [crm:E7_Activity] in [CIDOC-CRM]
+* [lode:Event] in [Linking Open Descriptions of Events]
+* [dul:Event] in [DOLCE+DnS Ultralite ontology]
+* [ncal:Event] in [NEPOMUK Calendar Ontology]
+* [tio:Event] in [Tickets Ontology]
+
+[dctype:Event]: http://dublincore.org/documents/dcmi-terms/#dcmitype-Event
+[event:Event]: http://motools.sourceforge.net/event/event.html#term_Event
+[schema:Event]: http://schema.org/Event
+[crm:E7_Activity]: http://purl.org/NET/cidoc-crm/core#E7_Activity
+[prov:Activity]: http://www.w3.org/TR/prov-o/#Activity
+[lode:Event]: http://linkedevents.org/ontology/Event
+[dul:Event]: http://www.loa-cnr.it/ontologies/DUL.owl#Event
+[ncal:Event]:  http://www.semanticdesktop.org/ontologies/ncal/#Event
+[tio:Event]: http://purl.org/tio/ns#Event
+
+SSSO is agnostic to these existing classes, so [ServiceEvent] is a subclass
+of all of them to make happy multiple communities. Applications of SSSO, 
+however, SHOULD NOT depend on the explicit expression of a particular event 
+class in addition to ServiceEvent.
+
+A ServiceEvent is further subclass of [schema:IndividualProduct] 
 and [gr:Individual], which imply [schema:Product] and [gr:ProductOrService].
 Nevertheless, SSSO does not make any assumptions whether a [ServiceEvent] is
 actually sold or just provided for free.
@@ -207,13 +304,16 @@ actually sold or just provided for free.
             gr:Individual ;
             rdfs:isDefinedBy <> .
 
+The event can be connected to one or more [ServiceProvider] with property
+[providedBy] and to one or more [ServiceConsumer] with property [consumedBy].
+
 ## ServiceFulfillment
 
 [ServiceFulfillment]: #servicefulfillment
 
 A **service fulfillment** is a [ServiceEvent] that consists of one or more
 parts. Each of these parts is also a [ServiceEvent] and connected to the
-service fulfillment by `dcterms:partOf`. Vice versa, each instance of
+service fulfillment by [dcterms:partOf]. Vice versa, each instance of
 [ServiceEvent] is also instance of [ServiceFulfillment] if connected to another
 [ServiceEvent] by [dcterms:hasPart].  The parts of a service fulfillment SHOULD
 be connected to each other by [nextService] and [previousService].
@@ -545,27 +645,8 @@ The following inference rules apply:
 { $a a ssso:ServiceEvent . $b a ssso:ServiceEvent . $a dcterms:hasPart $b } => { $a a ssso:ServiceFulfillment } .
 ```
 
-# Related ontologies
 
-[related ontologies]: #related-ontologies
-
-The core class [ServiceEvent] is subclass of event and activity classes from several
-related ontologies. The large number of similar classes may result from an inability 
-of ontology engineers to agree on semantics or the dislike to refer to ontologies that
-have been designed by someone else. The related classes and ontologies include:
-
-* [dctype:Event] from Dublin Core Metadata Terms
-* [schema:Event] from Schema.org Ontology
-* [event:Event] from Event ontology
-* prov:Activity from Provenance ontology
-* E7_Activity from the [CIDOC Conceptual Reference Model](http://www.cidoc-crm.org/) expressed in OWL
-* lode:Event from LODE ontology (Linking Open Descriptions of Events)
-* dul:Event from DOLCE+DnS Ultralite ontology
-* ncal:Event from NEPOMUK Calendar Ontology
-* tio:Event from Tickets ontology
-
-SSSO further makes use of the Dublin Core Metadata Terms [dcterms:hasPart] and
-[dcterms:partOf].
+# Relations to Schema.org and GoodRelations
 
 The relation between SSSO, Schema.org, and [GoodRelations] can best be
 described by some examples (taken from [GoodRelations], licensed under CC-BY-SA
@@ -591,14 +672,11 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 [ServiceFulfillment]), which is typically also an instance of [gr:Individual],
 [gr:ProductOrService], and [schema:Product].
 
-
+[dcterms:date]: http://dublincore.org/documents/dcmi-terms/#terms-date
 [dcterms:hasPart]: http://dublincore.org/documents/dcmi-terms/#terms-hasPart
 [dcterms:partOf]: http://dublincore.org/documents/dcmi-terms/#terms-partOf
 
-[dctype:Event]: http://dublincore.org/documents/dcmi-terms/#dcmitype-Event
 [dctype:Service]: http://dublincore.org/documents/dcmi-terms/#dcmitype-Service
-
-[event:Event]: http://motools.sourceforge.net/event/event.html#term_Event
 
 [foaf:Agent]: http://xmlns.com/foaf/spec/#term_Agent
 
@@ -609,7 +687,11 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 [gr:offers]: http://purl.org/goodrelations/v1#offers
 [gr:seeks]: http://purl.org/goodrelations/v1#seeks
 
-[schema:Event]: http://schema.org/Event
+[lode:atTime]: http://linkedevents.org/ontology/#term-atTime
+[lode:circa]: http://linkedevents.org/ontology/#term-circa
+
+[prov:startedAtTime]: http://www.w3.org/TR/prov-o/#startedAtTime
+[prov:endedAtTime]: http://www.w3.org/TR/prov-o/#endedAtTime
 [schema:Product]: http://schema.org/Product
 [schema:IndividualProduct]: http://schema.org/IndividualProduct
 [schema:Offer]: http://schema.org/Offer
@@ -617,6 +699,8 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 [schema:endDate]: http://schema.org/Event
 
 [tio:ActualTicket]: http://purl.org/tio/ns#ActualTicket
+[tio:starts]: http://purl.org/tio/ns#starts
+[tio:ends]: http://purl.org/tio/ns#ends
 
 [GoodRelations]: http://www.heppnetz.de/projects/goodrelations/
 
@@ -634,14 +718,14 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 
 SSSO was motivated by the design of the following ontologies and specifications
 
-* **[PAIA]** J. Voß: *Patrons Account Information API*.
+* J. Voß: *Patrons Account Information API*.
   2013 <http://purl.org/ontology/paia>
-* **[DAIA]** J. Voß: *Document Availability Information API*. 
+* J. Voß: *Document Availability Information API*. 
   2013 <http://github.com/gbv/daiaspec>.
 
 SSSO is loosely connected to the following ontologies: it is compatible with
 them but their use is optional. Feel free to rely on or ignore additional parts
-Offering these ontologies when using SSSO.
+of these ontologies when using SSSO.
 
 * *Dublin Core Metadata Terms*. 
   <http://dublincore.org/documents/dcmi-terms/> .
@@ -655,8 +739,8 @@ Offering these ontologies when using SSSO.
   <http://linkedevents.org/ontology/> .
 * *NEPOMUK Calendar Ontology*.
   <http://www.semanticdesktop.org/ontologies/ncal/> .
-* *DOLCE+DnS Ultralite (DUL) ontology*. 
-  *<http://ontologydesignpatterns.org/wiki/Ontology:DOLCE+DnS_Ultralite>*.
+* *DOLCE+DnS Ultralite (DUL) ontology*
+  <http://ontologydesignpatterns.org/wiki/Ontology:DOLCE+DnS_Ultralite>*.
 * *CIDOC CRM in OWL 2*.
   <http://bloody-byte.net/rdf/cidoc-crm/>.
 * *GoodRelations*.
@@ -664,6 +748,16 @@ Offering these ontologies when using SSSO.
 * *Tickets Ontology*
   <http://purl.org/tio>.
 
-[Patrons Account Information API]: http://purl.org/ontology/paia
+[Dublin Core Metadata Terms]: http://dublincore.org/documents/dcmi-terms/
+[CIDOC-CRM]: http://www.cidoc-crm.org/
+[DOLCE+DnS Ultralite Ontology]: http://ontologydesignpatterns.org/wiki/Ontology:DOLCE+DnS_Ultralite
 [Document Availability API]: http://purl.org/ontology/daia
+[Event Ontology]: http://motools.sf.net/event/event.html
+[Linking Open Descriptions of Events]: http://linkedevents.org/ontology/
+[NEPOMUK Calendar Ontology]: http://www.semanticdesktop.org/ontologies/ncal/
+[Patrons Account Information API]: http://purl.org/ontology/paia
+[Provenance Ontology]: http://www.w3.org/TR/prov-o/
+[Schema.org Ontology]: http://schema.org/
+[Tickets Ontology]: http://purl.org/tio
+
 
