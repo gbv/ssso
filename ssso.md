@@ -1,9 +1,10 @@
 # Introduction
 
 The **Simple Service Status Ontology (SSSO)** is an event-based RDF ontology
-for typical status in fulfillment of a service. The specification of SSSO was
-motivated by the design of an ontology of [Patrons Account Information API]
-(PAIA) and a redesign of an ontology of [Document Availability API] (DAIA).
+for typical status in fulfillment of a service. A service in SSSO is an event
+that is provided as product. The specification of SSSO was motivated by the
+design of an ontology of [Patrons Account Information API] (PAIA) and
+a redesign of an ontology of [Document Availability API] (DAIA).
 
 ## Status of this document
 
@@ -95,16 +96,13 @@ The following namespace prefixes are used to refer to related ontologies:
 
 # Overview
 
-A [ServiceFulfillment] according to SSSO is modeled as set of service events,
-each being an instance of [ServiceEvent]. Examples of a [ServiceFulfillment]
-include the purchase of a product in a shop, the attendance at a performance,
-and the lending of a book in a library. In contrast to [related ontologies],
-each [ServiceEvent] and each [ServiceFulfillment] is a not a general offer but
-a particular activity in time. The activity typically takes place provided by
-one or more particular [ServiceProvider] (e.g. a shop, presenter, or library)
-and consumed by one or more [ServiceConsumer] (e.g. a customer, attendee, or
-patron). Multiple service event that belong to one service fulfillment SHOULD
-be connected in time with properties [nextService] and [previousService].
+A [ServiceEvent] according to SSSO is an event that is provided as product.
+Examples of [ServiceEvent] and [ServiceFulfillment] include a particular
+purchase of a product in a shop, a specific attendance at a performance, and
+a certain lending of a book in a library. The event is an activity in time that
+is typically provided by one or more [ServiceProvider] (e.g. a shop, presenter,
+or library) and consumed by one or more [ServiceConsumer] (e.g. a customer,
+attendee, or patron). 
 
 The following diagram illustrates the classes and properties defined in this
 ontology:
@@ -135,8 +133,10 @@ ontology:
 ## Service status
 
 SSSO defines five typical service status as disjoint subclasses of
-[ServiceEvent]. Actual service fulfillments do not need to implement all of
-these service status.
+[ServiceEvent]. Multiple [ServiceEvent] that belong to one [ServiceFulfillment]
+SHOULD be connected in time with properties [nextService] and
+[previousService]. An actual [ServiceFulfillment] does not need to implement
+all of these service status.
 
 * A [ReservedService] is in status **reserved**:\
   the service has been accepted for execution but no action has taken place.
@@ -160,6 +160,7 @@ these service status.
 * A [RejectedService] is in status **rejected**:\
   the service has been refused or stopped. A possible example is a 
   canceled contract.
+
 
 ## Service limitations
 
@@ -278,15 +279,15 @@ more general event or activity classes:
 [ncal:Event]:  http://www.semanticdesktop.org/ontologies/ncal/#Event
 [tio:Event]: http://purl.org/tio/ns#Event
 
-SSSO is agnostic to these existing classes, so [ServiceEvent] is a subclass
-of all of them to make happy multiple communities. Applications of SSSO, 
-however, SHOULD NOT depend on the explicit expression of a particular event 
-class in addition to ServiceEvent.
+Existing product classes include:
 
-A ServiceEvent is further subclass of [schema:IndividualProduct] 
-and [gr:Individual], which imply [schema:Product] and [gr:ProductOrService].
-Nevertheless, SSSO does not make any assumptions whether a [ServiceEvent] is
-actually sold or just provided for free.
+* [schema:IndividualProduct] (which implies [gr:Product]) from [Schema.org Ontology]
+* [gr:Individual] (which implies [gr:ProductOrService]) from [GoodRelations]
+
+SSSO is agnostic to these existing classes, so [ServiceEvent] is a subclass of
+all of them to make happy multiple communities. Applications of SSSO, however,
+SHOULD NOT depend on the explicit expression of a particular event or product
+class in addition to ServiceEvent.
 
     ssso:ServiceEvent a owl:Class ;
         rdfs:label "ServiceEvent" ;
@@ -550,7 +551,7 @@ special value "unknown" to indicate a significant delay of unknown duration.
 The range may later be extended to a subset of Extended [Date/Time
 Format](http://www.loc.gov/standards/datetime/) (EDTF).
 
-    ssso:queue a owl:DatatypeProperty ;
+    ssso:delay a owl:DatatypeProperty ;
         rdfs:label "delay" ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:isDefinedBy <> .
