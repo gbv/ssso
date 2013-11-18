@@ -47,15 +47,24 @@ The ontology is defined in RDF/Turtle as following:
     @prefix ssso: <http://purl.org/ontology/ssso#> .
     @base         <http://purl.org/ontology/ssso> .
 
-    @prefix owl:  <http://www.w3.org/2002/07/owl#> .
-    @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-    @prefix vann: <http://purl.org/vocab/vann/> .
-    @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+    @prefix owl:     <http://www.w3.org/2002/07/owl#> .
+    @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix vann:    <http://purl.org/vocab/vann/> .
+    @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+    @prefix cc:      <http://creativecommons.org/ns#> .
+    @prefix dcterms: <http://purl.org/dc/terms/> .
 
     <> a owl:Ontology ;
-        rdfs:label "Simple Service Status Ontology" ;
+        dcterms:title "Simple Service Status Ontology"@en ;
         rdfs:label "SSSO" ;
-        vann:preferredNamespacePrefix "ssso" .
+        vann:preferredNamespacePrefix "ssso" ;
+        vann:preferredNamespaceUri "http://purl.org/ontology/ssso#" ;
+        dcterms:description "An event-based RDF ontology for typical status in fulfillment of a service."@en ;
+        dcterms:modified "{GIT_REVISION_DATE}"^^xsd:date ;
+        owl:versionInfo "{VERSION}" ;
+        cc:license <http://creativecommons.org/licenses/by/3.0/> ;
+        dcterms:creator "Jakob Voß" 
+    .
 
 ## Related ontologies
 
@@ -80,7 +89,6 @@ have been designed by someone else. The related ontologies are:
 The following namespace prefixes are used to refer to related ontologies:
 
     @prefix crm:     <http://purl.org/NET/cidoc-crm/core#> .
-    @prefix dcterms: <http://purl.org/dc/terms/> .
     @prefix dctype:  <http://purl.org/dc/dcmitype/> .
     @prefix dul:     <http://www.loa-cnr.it/ontologies/DUL.owl#> .
     @prefix event:   <http://purl.org/ontology/c4dm/event.owl#> .
@@ -290,7 +298,7 @@ SHOULD NOT depend on the explicit expression of a particular event or product
 class in addition to ServiceEvent.
 
     ssso:ServiceEvent a owl:Class ;
-        rdfs:label "ServiceEvent" ;
+        rdfs:label "ServiceEvent"@en ;
         rdfs:subClassOf 
             dctype:Event , 
             event:Event , 
@@ -320,7 +328,7 @@ service fulfillment by [dcterms:partOf]. Vice versa, each instance of
 be connected to each other by [nextService] and [previousService].
 
     ssso:ServiceFulfillment a owl:Class ;
-        rdfs:label "ServiceFulfillment" ;
+        rdfs:label "ServiceFulfillment"@en ;
         rdfs:subClassOf ssso:ServiceEvent ;
         rdfs:isDefinedBy <> .
 
@@ -335,7 +343,7 @@ typical example is a product order that has been placed but not payed yet or a
 payed ticket to a theater performance.
 
     ssso:ReservedService a owl:Class ;
-        rdfs:label "ReservedService" ;
+        rdfs:label "ReservedService"@en ;
         rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith 
           ssso:PreparedService, ssso:ProvidedService, 
@@ -350,7 +358,7 @@ A **prepared service** is being prepared to be provided or executed. A typical
 example is a product that is being send to its consumer.
 
     ssso:PreparedService a owl:Class ;
-        rdfs:label "ReservedService" ;
+        rdfs:label "ReservedService"@en ;
         rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:ProvidedService, 
@@ -365,7 +373,7 @@ A **provided service** is being made available for immediate execution. A
 typical example is a product that is ready for being picked up by its consumer.
 
     ssso:ReservedService a owl:Class ;
-        rdfs:label "ReservedService" ;
+        rdfs:label "ReservedService"@en ;
         rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:PreparedService, 
@@ -380,7 +388,7 @@ An **executed service** represents the actual execution event of fulfillment of
 a service. A typical example is a theater performance that is being played.
 
     ssso:ExecutedService a owl:Class ;
-        rdfs:label "ExecutedService" ;
+        rdfs:label "ExecutedService"@en ;
         rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:PreparedService, 
@@ -396,7 +404,7 @@ provider or by its consumer. The rejection may be infinite or it may be
 followed by another service when the reason for rejection has been removed.
 
     ssso:RejectedService a owl:Class ;
-        rdfs:label "RejectedService" ;
+        rdfs:label "RejectedService"@en ;
         rdfs:subClassOf ssso:ServiceEvent ;
         owl:disjointWith
           ssso:ReservedService, ssso:PreparedService, 
@@ -413,7 +421,7 @@ instances of [foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any
 constraints on the nature of providers.
 
     ssso:ServiceProvider a owl:Class ;
-        rdfs:label "ServiceProvider" ;
+        rdfs:label "ServiceProvider"@en ;
         rdfs:isDefinedBy <> .
 
 ## ServiceConsumer
@@ -426,7 +434,7 @@ instances of [foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any
 constraints on the nature of consumers.
 
     ssso:ServiceConsumer a owl:Class ;
-        rdfs:label "ServiceConsumer" ;
+        rdfs:label "ServiceConsumer"@en ;
         rdfs:isDefinedBy <> .
 
 ## ServiceLimitation
@@ -440,7 +448,7 @@ product or activity than originally requested. Services and limitations are
 connected to each other with properties [limits] and [limitedBy].
 
     ssso:ServiceLimitation a owl:Class ;
-        rdfs:label "ServiceLimitation" ;
+        rdfs:label "ServiceLimitation"@en ;
         rdfs:isDefinedBy <> .
 
 ## TimeTravel
@@ -451,7 +459,7 @@ A **time travel** is an event which ends before it has been started. Details
 have been implemented in the future.
 
     ssso:TimeTravel a owl:Class ;
-        rdfs:label "TimeTravel" ;
+        rdfs:label "TimeTravel"@en ;
         rdfs:isDefinedBy <> .
 
 # Properties
@@ -464,7 +472,7 @@ Relates a [ServiceProvider] instance that **provides** a [ServiceEvent]
 instance to this service event.
 
     ssso:provides a owl:ObjectProperty ;
-        rdfs:label "provides" ;
+        rdfs:label "provides"@en ;
         rdfs:domain ssso:ServiceProvider ;
         rdfs:range ssso:ServiceEvent ;
         owl:inverseOf ssso:providedBy ;
@@ -478,7 +486,7 @@ Relates a [ServiceEvent] instance that is **provided by** a [ServiceProvider]
 instance to this service provider.
 
     ssso:providedBy a owl:ObjectProperty ;
-        rdfs:label "providedBy" ;
+        rdfs:label "providedBy"@en ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range ssso:ServiceProvider ;
         owl:inverseOf ssso:provides ;
@@ -492,7 +500,7 @@ Relates a [ServiceConsumer] instance that **consumes** a [ServiceEvent]
 instance to this service event.
 
     ssso:consumes a owl:ObjectProperty ;
-        rdfs:label "consumes" ;
+        rdfs:label "consumes"@en ;
         rdfs:domain ssso:ServiceConsumer ;
         rdfs:range ssso:ServiceEvent ;
         owl:inverseOf ssso:consumedBy ;
@@ -506,7 +514,7 @@ Relates a [ServiceEvent] instance that is **consumed by** a [ServiceConsumer]
 instance to this service consumer.
 
     ssso:consumedBy a owl:ObjectProperty ;
-        rdfs:label "consumedBy" ;
+        rdfs:label "consumedBy"@en ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range ssso:ServiceConsumer ;
         owl:inverseOf ssso:consumes ;
@@ -520,7 +528,7 @@ Relates a [ServiceLimitation] instance that **limits** a [ServiceEvent]
 instance to this service event.
 
     ssso:limits a owl:ObjectProperty ;
-        rdfs:label "limits" ;
+        rdfs:label "limits"@en ;
         rdfs:domain ssso:ServiceLimitation ;
         rdfs:range ssso:ServiceEvent ;
         owl:inverseOf ssso:limitedBy ;
@@ -534,7 +542,7 @@ Relates a [ServiceEvent] instance that is **limited by** a [ServiceLimitation]
 instance to this service limitation.
 
     ssso:limitedBy a owl:ObjectProperty ;
-        rdfs:label "limitedBy" ;
+        rdfs:label "limitedBy"@en ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range ssso:ServiceLimitation ;
         owl:inverseOf ssso:limits ;
@@ -552,7 +560,7 @@ The range may later be extended to a subset of Extended [Date/Time
 Format](http://www.loc.gov/standards/datetime/) (EDTF).
 
     ssso:delay a owl:DatatypeProperty ;
-        rdfs:label "delay" ;
+        rdfs:label "delay"@en ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:isDefinedBy <> .
 
@@ -572,7 +580,7 @@ This property can be used to indicate the **size of a waiting queue** for some
 [ServiceEvent]. Its value MUST be a non-negative integer (0,1,2...).
 
     ssso:queue a owl:DatatypeProperty ;
-        rdfs:label "queue" ;
+        rdfs:label "queue"@en ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range xsd:nonNegativeInteger ;
         rdfs:isDefinedBy <> .
@@ -588,7 +596,7 @@ instance MUST be equal or later then the ending time of the previous service
 [ExecutedService]).
 
     ssso:nextService a owl:ObjectProperty ;
-        rdfs:label "nextService" ;
+        rdfs:label "nextService"@en ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range  ssso:ServiceEvent ;
         owl:inverseOf ssso:previousService ;
@@ -605,7 +613,7 @@ service  (unless one of the services is an instance of [TimeTravel] and
 [ExecutedService]).
 
     ssso:previousService a owl:ObjectProperty ;
-        rdfs:label "previousService" ;
+        rdfs:label "previousService"@en ;
         rdfs:domain ssso:ServiceEvent ;
         rdfs:range  ssso:ServiceEvent ;
         owl:inverseOf ssso:nextService ;
