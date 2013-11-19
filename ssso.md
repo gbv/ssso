@@ -39,7 +39,8 @@ interpreted as described in RFC 2119.
 ## Namespace and prefix
 
 The URI namespace of Simple Service Status Ontology (SSSO) is 
-<http://purl.org/ontology/ssso#>. The namespace prefix `ssso` SHOULD be used.
+[http://purl.org/ontology/ssso#](http://purl.org/ontology/ssso#). 
+The namespace prefix `ssso` SHOULD be used.
 The URI of this ontology as a whole is <http://purl.org/ontology/ssso>.
 
 The ontology is defined in RDF/Turtle as following:
@@ -70,6 +71,9 @@ The ontology is defined in RDF/Turtle as following:
 
 [related ontologies]: #related-ontologies
 
+The core class [ServiceEvent] is based on the class [service:Service] from the
+[Service Ontology].
+
 Several existing ontologies include classes to model events or activities. 
 Interconnections between these related ontologies, however, are rare. The
 large number of similar classes may result from an inability of ontology 
@@ -88,10 +92,12 @@ have been designed by someone else. The related ontologies are:
 
 The following namespace prefixes are used to refer to related ontologies:
 
+    @prefix service: <http://purl.org/ontology/service#> .
     @prefix crm:     <http://purl.org/NET/cidoc-crm/core#> .
     @prefix dctype:  <http://purl.org/dc/dcmitype/> .
     @prefix dul:     <http://www.loa-cnr.it/ontologies/DUL.owl#> .
     @prefix event:   <http://purl.org/ontology/c4dm/event.owl#> .
+    @prefix edm:     <http://www.europeana.eu/schemas/edm/> .
     @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
     @prefix geo:     <http://www.w3.org/2003/01/geo/wgs84_pos#> .
     @prefix gr:      <http://purl.org/goodrelations/v1#> .
@@ -106,35 +112,35 @@ The following namespace prefixes are used to refer to related ontologies:
 
 A [ServiceEvent] according to SSSO is an event that is provided as product.
 Examples of [ServiceEvent] and [ServiceFulfillment] include a particular
-purchase of a product in a shop, a specific attendance at a performance, and
-a certain lending of a book in a library. The event is an activity in time that
-is typically provided by one or more [ServiceProvider] (e.g. a shop, presenter,
-or library) and consumed by one or more [ServiceConsumer] (e.g. a customer,
-attendee, or patron). 
+purchase of a product in a shop, a specific attendance at a performance, and a
+certain lending of a book in a library. The event is an activity in time that
+is typically provided by one or more [service:ServiceProvider] (e.g. a shop,
+presenter, or library) and consumed by one or more [service:ServiceConsumer]
+(e.g. a customer, attendee, or patron). 
 
 The following diagram illustrates the classes and properties defined in this
 ontology:
 
 ``` {.ditaa}
-                                   nextService / previousService
-                                              ------
-                                             |      |
-                                             v      v
-   +-----------------+   provides     +--------------------+   consumedBy   +-----------------+
-   | ServiceProvider |--------------->|    ServiceEvent    |--------------->| ServiceConsumer |
-   |                 |<---------------|                    |<---------------|                 |
-   +-----------------+   providedBy   |   ReservedService  |   consumes     +-----------------+
-                                      |   PreparedService  |
-                                      |   ProvidedService  |
-        +------------+   limits       |   ExecutedService  |   delay    
-        | Limitation |--------------->|   RejectedService  |-------------> duration-or-time
-        |            |<---------------|                    |-------------> xsd:nonNegativeInteger
-        +------------+  limitedBy     | ServiceFulfillment |   queue
-                                      +-----^--------------+
-                                            |      ^
-                                            |      |
-                                             ------
-                               dcterms:hasPart / dcterms:partOf
+    nextService / previousService
+               ------
+              |      |
+              v      v
+       +--------------------+
+       |    ServiceEvent    |
+       |                    |
+       |   ReservedService  |
+       |   PreparedService  |
+       |   ProvidedService  |
+       |   ExecutedService  |
+       |   RejectedService  |
+       |                    |
+       | ServiceFulfillment |
+       +-----^--------------+
+             |      ^
+             |      |
+              ------
+dcterms:hasPart / dcterms:partOf
 ```
 
 
@@ -170,18 +176,13 @@ all of these service status.
   canceled contract.
 
 
-## Service limitations
-
-SSSO also defines the class [ServiceLimitation] and the properties [limits],
-[limitedBy], [delay], and [queue] to express limitations of services.
-
 ## Service types
 
 SSSO does not make any assumptions about types of services.  To define service
 types, define a subclass of [ServiceEvent].  The class [TimeTravel] is included
 in SSSO as toy example of an artificial service type. See the [Document Service
 Ontology](http://gbv.github.com/dso) (DSO) for more practical examples of
-service types based on SSSO.
+service types that can be used together with SSSO.
 
 ## Service times
 
@@ -204,10 +205,17 @@ Property values of service times SHOULD be modeled as instance of
 MUST be equal to or earlier than the ending time of the same service event
 (unless the service is an instance of [TimeTravel] and [ExecutedService]).
 
-To express an estimated and additional time, SSSO defines the property [delay]
-which can also hold a relative duration. Applications SHOULD NOT use this
-property to relate a service event to its normal time, unless this time is
-an additional constraint.
+To express an estimated and additional time, the Service Ontology defines the
+property [service:delay] which can also hold a relative duration. Applications
+SHOULD NOT use this property to relate a service event to its normal time,
+unless this time is an additional constraint.
+
+<!-- TODO: use purl-URIs -->
+
+[service:delay]: http://dini-ag-kim.github.io/service-ontology/service.html#delay
+[service:Service]: http://dini-ag-kim.github.io/service-ontology/service.html#Service
+[service:ServiceProvider]: http://dini-ag-kim.github.io/service-ontology/service.html#ServiceProvider
+[service:ServiceConsumer]: http://dini-ag-kim.github.io/service-ontology/service.html#ServiceConsumer
 
 ## Service locations
 
@@ -263,9 +271,9 @@ Service locations are OPTIONAL and a service event MAY have multiple locations.
 
 [ServiceEvent]: #ServiceEvent
 
-A **service event** is both, an activity that takes places during a specific
-time, and a kind of product or service. Several [related ontologies] define 
-more general event or activity classes:
+A **service event** is a service (defined as [service:Service] in the [Service
+Ontology] and also an activity that takes places during a specific time.
+Several [related ontologies] define more general event or activity classes:
 
 * [dctype:Event] in [Dublin Core Metadata Terms]
 * [schema:Event] in [Schema.org Ontology]
@@ -300,8 +308,10 @@ class in addition to ServiceEvent.
     ssso:ServiceEvent a owl:Class ;
         rdfs:label "ServiceEvent"@en ;
         rdfs:subClassOf 
+            service:Service ,
             dctype:Event , 
             event:Event , 
+            edm:Event ,
             prov:Activity , 
             lode:Event , 
             dul:Event ,
@@ -312,9 +322,6 @@ class in addition to ServiceEvent.
             schema:IndividualProduct ,
             gr:Individual ;
             rdfs:isDefinedBy <> .
-
-The event can be connected to one or more [ServiceProvider] with property
-[providedBy] and to one or more [ServiceConsumer] with property [consumedBy].
 
 ## ServiceFulfillment
 
@@ -411,46 +418,6 @@ followed by another service when the reason for rejection has been removed.
           ssso:ProvidedService, ssso:ExecutedService ;
         rdfs:isDefinedBy <> .
 
-## ServiceProvider
-
-[ServiceProvider]: #serviceprovider
-
-A **service provider** is an entity that is responsible for providing a
-[ServiceEvent].  Typical providers, such as organizations and people, are also
-instances of [foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any
-constraints on the nature of providers.
-
-    ssso:ServiceProvider a owl:Class ;
-        rdfs:label "ServiceProvider"@en ;
-        rdfs:isDefinedBy <> .
-
-## ServiceConsumer
-
-[ServiceConsumer]: #serviceconsumer
-
-A **service consumer** is an entity that is requesting or consuming a
-[ServiceEvent].  Typical consumers, such as organizations and people, are
-instances of [foaf:Agent] and [gr:BusinessEntity] but SSSO does not put any
-constraints on the nature of consumers.
-
-    ssso:ServiceConsumer a owl:Class ;
-        rdfs:label "ServiceConsumer"@en ;
-        rdfs:isDefinedBy <> .
-
-## ServiceLimitation
-
-[ServiceLimitation]: #servicelimitation
-
-A **service limitation** is some obstacle that may limit the use of a
-[ServiceEvent]. For instance the purchase of guns and drugs is limited to
-consumers with special permission. Another example is providing a different
-product or activity than originally requested. Services and limitations are
-connected to each other with properties [limits] and [limitedBy].
-
-    ssso:ServiceLimitation a owl:Class ;
-        rdfs:label "ServiceLimitation"@en ;
-        rdfs:isDefinedBy <> .
-
 ## TimeTravel
 
 [TimeTravel]: #timetravel
@@ -463,127 +430,6 @@ have been implemented in the future.
         rdfs:isDefinedBy <> .
 
 # Properties
-
-## provides
-
-[provides]: #provides
-
-Relates a [ServiceProvider] instance that **provides** a [ServiceEvent]
-instance to this service event.
-
-    ssso:provides a owl:ObjectProperty ;
-        rdfs:label "provides"@en ;
-        rdfs:domain ssso:ServiceProvider ;
-        rdfs:range ssso:ServiceEvent ;
-        owl:inverseOf ssso:providedBy ;
-        rdfs:isDefinedBy <> .
-
-## providedBy
-
-[providedBy]: #providedBy
-
-Relates a [ServiceEvent] instance that is **provided by** a [ServiceProvider]
-instance to this service provider.
-
-    ssso:providedBy a owl:ObjectProperty ;
-        rdfs:label "providedBy"@en ;
-        rdfs:domain ssso:ServiceEvent ;
-        rdfs:range ssso:ServiceProvider ;
-        owl:inverseOf ssso:provides ;
-        rdfs:isDefinedBy <> .
-
-## consumes
-
-[consumes]: #consumes
-
-Relates a [ServiceConsumer] instance that **consumes** a [ServiceEvent]
-instance to this service event.
-
-    ssso:consumes a owl:ObjectProperty ;
-        rdfs:label "consumes"@en ;
-        rdfs:domain ssso:ServiceConsumer ;
-        rdfs:range ssso:ServiceEvent ;
-        owl:inverseOf ssso:consumedBy ;
-        rdfs:isDefinedBy <> .
-
-## consumedBy
-
-[consumedBy]: #consumedBy
-
-Relates a [ServiceEvent] instance that is **consumed by** a [ServiceConsumer]
-instance to this service consumer.
-
-    ssso:consumedBy a owl:ObjectProperty ;
-        rdfs:label "consumedBy"@en ;
-        rdfs:domain ssso:ServiceEvent ;
-        rdfs:range ssso:ServiceConsumer ;
-        owl:inverseOf ssso:consumes ;
-        rdfs:isDefinedBy <> .
-
-## limits
-
-[limits]: #limits
-
-Relates a [ServiceLimitation] instance that **limits** a [ServiceEvent]
-instance to this service event.
-
-    ssso:limits a owl:ObjectProperty ;
-        rdfs:label "limits"@en ;
-        rdfs:domain ssso:ServiceLimitation ;
-        rdfs:range ssso:ServiceEvent ;
-        owl:inverseOf ssso:limitedBy ;
-        rdfs:isDefinedBy <> .
-
-## limitedBy
-
-[limitedBy]: #limitedBy
-
-Relates a [ServiceEvent] instance that is **limited by** a [ServiceLimitation]
-instance to this service limitation.
-
-    ssso:limitedBy a owl:ObjectProperty ;
-        rdfs:label "limitedBy"@en ;
-        rdfs:domain ssso:ServiceEvent ;
-        rdfs:range ssso:ServiceLimitation ;
-        owl:inverseOf ssso:limits ;
-        rdfs:isDefinedBy <> .
-
-## delay
-
-[delay]: #delay
-
-This property can be used to specify an **estimated period of time or a date**
-when a delayed [ServiceEvent] is expected to take place. Applications SHOULD
-use values in the range of [xsd:duration], [xsd:dateTime], [xsd:date], or the
-special value "unknown" to indicate a significant delay of unknown duration.
-The range may later be extended to a subset of Extended [Date/Time
-Format](http://www.loc.gov/standards/datetime/) (EDTF).
-
-    ssso:delay a owl:DatatypeProperty ;
-        rdfs:label "delay"@en ;
-        rdfs:domain ssso:ServiceEvent ;
-        rdfs:isDefinedBy <> .
-
-[xsd:dateTime]: http://www.w3.org/TR/xmlschema-2/#dateTime
-[xsd:date]: http://www.w3.org/TR/xmlschema-2/#date
-[xsd:duration]: http://www.w3.org/TR/xmlschema-2/#duration
-
-Applications SHOULD NOT use this property to specify a normal [Service
-time](#service-time). An example of a service event with delay is a concert
-that starts at an official time but there is a delay until band begins to play.
-
-## queue
-
-[queue]: #queue
-
-This property can be used to indicate the **size of a waiting queue** for some
-[ServiceEvent]. Its value MUST be a non-negative integer (0,1,2...).
-
-    ssso:queue a owl:DatatypeProperty ;
-        rdfs:label "queue"@en ;
-        rdfs:domain ssso:ServiceEvent ;
-        rdfs:range xsd:nonNegativeInteger ;
-        rdfs:isDefinedBy <> .
 
 ## nextService
 
@@ -619,6 +465,7 @@ service  (unless one of the services is an instance of [TimeTravel] and
         owl:inverseOf ssso:nextService ;
         rdfs:isDefinedBy <> .
 
+<!--
 # Rules
 
 The following inference rules apply:
@@ -653,7 +500,7 @@ The following inference rules apply:
 # service fulfillment
 { $a a ssso:ServiceEvent . $b a ssso:ServiceEvent . $a dcterms:hasPart $b } => { $a a ssso:ServiceFulfillment } .
 ```
-
+-->
 
 # Relations to Schema.org and GoodRelations
 
@@ -722,6 +569,12 @@ In short, a [gr:Offering] refers to a *potential* [ServiceEvent] (and possibly
 
 * **[RFC 2396]** T. Berners-Lee et al.: *Uniform Resource Identifiers (URI): Generic Syntax*.
   August 1998 <http://tools.ietf.org/html/rfc2396>.
+
+* *The Service Ontology*.
+  (work in progress)
+  <http://dini-ag-kim.github.io/service-ontology/>.
+
+[Service Ontology]: http://dini-ag-kim.github.io/service-ontology/
 
 ## Informative References
 
