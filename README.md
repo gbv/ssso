@@ -15,25 +15,25 @@ are available at <http://gbv.github.io/ssso/ssso.ttl> and
 
 The following diagram illustrates the classes and properties definied in this ontology:
 
-```
-                                   nextService / previousService
-                                              ------
-                                             |      |
-                                             v      v
-   +-----------------+   provides     +--------------------+   consumedBy   +-----------------+
-   | ServiceProvider |--------------->|    ServiceEvent    |--------------->| ServiceConsumer |
-   |                 |<---------------|                    |<---------------|                 |
-   +-----------------+   providedBy   |   ReservedService  |   consumes     +-----------------+
-                                      |   PreparedService  |
-                                      |   ProvidedService  |
-        +------------+   limits       |   ExecutedService  |   delay    
-        | Limitation |--------------->|   RejectedService  |-------------> duration-or-time
-        |            |<---------------|                    |-------------> xsd:nonNegativeInteger
-        +------------+  limitedBy     | ServiceFulfillment |   queue
-                                      +-----^--------------+
-                                            |      ^
-                                            |      |
-                                             ------
-                               dcterms:hasPart / dcterms:partOf
+``` {.ditaa}
+    nextService / previousService
+               ------
+              |      |
+              v      v
+       +--------------------+
+       |    ServiceEvent    |
+       |                    |
+       |   ReservedService  |
+       |   PreparedService  |
+       |   ProvidedService  |
+       |   ExecutedService  |
+       |   RejectedService  |
+       |                    |
+       | ServiceFulfillment |
+       +-----^--------------+
+             |      ^
+             |      |
+              ------
+dcterms:hasPart / dcterms:partOf
 ```
 
